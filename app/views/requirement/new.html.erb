@@ -1,0 +1,14 @@
+
+
+	<%= simple_form_for(@rq,:url => '/requirement', method:  :post) do |r| %>
+	  	<%= r.input :avatar, label: 'Upload File', multiple: true %><br>
+		<%= r.input :name, label: 'Project Name' %><br>
+		<%= r.input :description, label: 'Description',as: :text %><br>
+		<%= r.input :end, label: 'Last Date' %><br>
+		<%= r.input :teamlead_id do%><br>
+			<% @tl   = Teamlead.where("id != ?",1)  %>
+	    	<%= r.collection_select :teamlead_id, @tl, :id, :username, prompt: " Select Team Lead " %><br>
+		<% end %>
+		<%= r.submit 'Save Project' %>
+	<% end %>
+

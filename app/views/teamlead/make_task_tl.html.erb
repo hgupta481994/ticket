@@ -1,0 +1,68 @@
+
+
+
+<p class="bg-primary">Project Name</p>
+<h4><%=@rq.name%></h4>
+<div class="column" style="background-color:#eee;" >
+    <h2>Tasks</h2>
+    <div class="panel-body">
+		<%= button_to "Add Task", add_task_path(@rq), method: :get %>
+	</div>
+	
+    <div>
+    	<%= form_tag tl_assign_to_multiple_teamlead_index_path,  method: :put do %>
+  			<table class="table table-hover">
+			    <tr>
+			      <th></th>
+			      <th>Task ID</th>
+			      <th>Task Name</th>
+			      <th>Task Type</th>
+			      <th>Assigned Date</th>
+			      <th>Assigned to </th>
+			      <th>End Date</th>
+			      <th>Attachement</th>
+			      <th>Status</th>
+			    </tr>
+			    <% @tks.each do |t| %>
+				    <tr>
+					  	<td><%= check_box_tag "tasks_ids[]", t.id %></td>
+			  			<td><%=t.id%></td>
+				    	<td><%= t.name %></td>
+				    	<% if t.type_id ==1 %>
+				    		<td>Issue</td>
+				    	<% elsif t.type_id ==2 %>
+				    		<td>Change Request</td>
+				    	<% else %>
+				    		<td>Enhancement</td>
+				    	<% end %>
+				    	<td><%= t.updated_at  %></td>
+				    	<% if t.user_id != t.teamlead_id %>
+				    		<td><%= User.find(t.user_id).username%></td>
+				    	<% else %>
+				    		<td>Not assigned </td>
+				    	<%end%>
+					    <td><%= t.end %></td>
+					    <td>         </td>
+					    <td><% if(t.status==false)%>
+						    	<%= "not done" %>
+						    	<%else%>
+						    	<%= "done" %>
+					    	<%end%>
+				    	</td>
+				    	<td><%= link_to ' Show ', task_path(t)%></td>
+				    	<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %>
+					</tr>
+				<% end%>
+			</table>
+			<% if (@dps != nil) || (@tts != nil)%>
+				<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
+			
+				<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
+				<%= hidden_field_tag :id, 1%>
+				<%#collection_select(:employee, User.all,  :id, :username, prompt: " select user to assign ") %>
+				<%= submit_tag "Assign Task" %>
+			<%end%>
+		<% end%>
+	</div>
+</div>
+

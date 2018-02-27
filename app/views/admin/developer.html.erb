@@ -1,0 +1,23 @@
+<div class="column" style="background-color:#fff;">
+		<h2>Developers</h2>
+			<table >
+				<tr>
+			      <th>Developers</th>
+			      <th>Assigned to</th>
+			      <th> Assign </th>
+			      <th></th>
+			    </tr>
+				<% for u in @ds %>
+						<tr>
+							<td><%= u.username %> </td>
+							<td>Assigned to <%=Teamlead.find(u.teamlead_id).username %></td>
+							<td></td>
+							<td><%= link_to " Make Team Lead ", make_teamlead_path(u), method: :patch %>
+								<td><%= link_to 'Delete Employee'  , admin_employee_path(u), method: :delete, data: {confirm: "Are you sure?"} %>   </td>
+								<% if u.teamlead_id == 1 %>
+									<td> Not under any TL </td>
+								<%end%>
+						</tr>
+				<% end %>
+			</table>
+</div>

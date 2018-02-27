@@ -1,0 +1,52 @@
+
+
+<h2 style=" color:blue;"> Project name --> <%=@rq.name %> </h1>
+<h3> New Task </h2>
+
+<%= simple_form_for(@task, :url => '/task', method: :post) do |t| %> 
+	<fieldset>
+		<div class="form-group">
+			<%= t.input :name, label: "Task name", class: 'form-control'  %><br>
+		</div>
+
+		<div class="form-group">
+			<%= t.input :description, label: "Description of task", class: 'form-control'  %><br>
+		</div>
+		<div class="form-group">
+			<%= t.input :start, class: 'form-control'  %><br>
+		</div>
+		<div class="form-group">
+			<%= t.input :end, class: 'form-control'  %><br>
+		</div>
+		<div class="form-group">
+			<%= t.label :Type_of_task %>
+			
+			<%= t.collection_select :tasktype_id, Tasktype.all, :id, :ttype, class: 'form-control'  %><br>
+		</div>
+		<div class="form-group">
+			<%= t.input :requirement_id, :as => :hidden, :input_html => { :value => @rq.id }%>
+			<%= t.input :teamlead_id, :as => :hidden, :input_html => { :value => current_user.id }%>
+		</div>
+
+		<div class="form-group">
+			<%= t.label :Assign_Employee %>
+			<%= t.grouped_collection_select :user_id, Usertype.order(:utype), :users, :utype,:id, :username,:include_blank => false, class: 'form-control'  %><br>
+		</div>
+
+		<!-- 
+		<div class="form-group">
+			<%= t.label :Developer %>
+			<%= t.collection_select :user_id, @dps, :id, :username,:include_blank => false, class: 'form-control'  %><br>
+		</div>
+
+		<div class="form-group">
+			<%= t.label :Tester %>
+			<%= t.collection_select :user_id, @tts, :id, :username,:include_blank => false, class: 'form-control'  %><br>
+		</div>
+		-->
+
+		<div class="form-group">
+			<%= t.button :submit %>
+		</div>
+	</fieldset>
+<% end %>

@@ -1,0 +1,64 @@
+<% if (current_user.present? )%> 
+	<%if (current_user.is_admin? == true ) %>
+		
+			<%= button_to " New Project ","requirement/new",:method => :get%>
+		
+
+		<h4>All Projects</h4>
+		<table class="table table-hover">
+			<tr>
+				<th></th>
+				<th>Project ID</th>
+				<th>Project Name</th>
+				<th>Project description</th>
+				<th>Last Date</th>
+				<th>Team Lead</th>
+				<th>Files</th>
+			</tr>
+			<% @rqs.each do |t| %>
+				<tr>
+					<td><%= check_box_tag "project_ids[]", t.id %></td>
+					<td><%=t.id%></td>
+					<td><%= t.name %></td>
+					<td><%= truncate(t.description, length: 20) %></td>
+					<td><%= t.end %></td>
+					<% if t.teamlead_id != nil %>
+						<td><%= Teamlead.find(t.teamlead_id).username%></td>
+					<% else %>
+						<td>Not assigned </td>
+					<%end%>
+					<td><%= t.avatar.url %></td>
+					<td><%= link_to "Edit", edit_requirement_path(t) %></td>
+					<td><%= link_to "Show", requirement_path(t) %></td>			    
+				</tr>
+			<% end %>
+		</table>
+	<%elsif current_user.usertype_id == 2%>
+		<h4>All Projects</h4>
+		<table class="table table-hover">
+			<tr>
+				<th></th>
+				<th>Project ID</th>
+				<th>Project Name</th>
+				<th>Project description</th>
+				<th>Last Date</th>
+				<th>Files</th>
+			</tr>
+			<% @rqs.each do |t| %>
+				<tr>
+					<% if t.teamlead_id == Teamlead.find_by_username(current_user.username).id %>
+						<td><%= check_box_tag "project_ids[]", t.id %></td>
+						<td><%= t.id%></td>
+						<td><%= t.name %></td>
+						<td><%= truncate(t.description, length: 20) %></td>
+						<td><%= t.end %></td>
+						<td><%= truncate(t.avatar.url, length: 20) %></td>
+						<td><%= link_to "Show", requirement_path(t) %></td>		
+						<td><%= link_to "Make task ", make_task_tl_path(t), :method => :get %>
+		 				</td>	    
+					<%end%>
+				</tr>
+			<% end %>
+		</table>
+	<% end %>
+<% end %>

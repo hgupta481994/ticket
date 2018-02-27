@@ -1,0 +1,11 @@
+<%= select_tag(:employee, options_from_collection_for_select(@cu, "id", "username")) %>
+#
+<%= hidden_field_tag(:tid, @tl.id) %>
+#
+<%= t.collection_select :teamlead_id, Teamlead.all, :id, :username, prompt: " select team leader " %>
+
+#
+<%= t.input :user_id,:collection => @dps,:label_method => :username,:value_method => :id,:label => "Developers" ,:include_blank => false %>
+OR OR OR OR
+<%= t.collection_select :user_id, @dps, :id, :username,:include_blank => false, class: 'form-control'  %>
+#
