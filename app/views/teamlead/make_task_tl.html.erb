@@ -28,9 +28,9 @@
 					  	<td><%= check_box_tag "tasks_ids[]", t.id %></td>
 			  			<td><%=t.id%></td>
 				    	<td><%= t.name %></td>
-				    	<% if t.type_id ==1 %>
+				    	<% if t.tasktype_id ==1 %>
 				    		<td>Issue</td>
-				    	<% elsif t.type_id ==2 %>
+				    	<% elsif t.tasktype_id ==2 %>
 				    		<td>Change Request</td>
 				    	<% else %>
 				    		<td>Enhancement</td>
@@ -63,6 +63,7 @@
 				<%= submit_tag "Assign Task" %>
 			<%end%>
 		<% end%>
+		
 	</div>
 </div>
 

@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :members, :class_name => 'User', :foreign_key => 'teamlead_id'
 
   scope :developers, -> { where(usertype_id: 3) }
+  scope :testers, -> { where(usertype_id: 4) }
 
   validates_format_of :username, with: /^[a-zA-Z0-9_\.]*$/, :multiline => true
 

@@ -30,20 +30,12 @@
 
 		<div class="form-group">
 			<%= t.label :Assign_Employee %>
-			<%= t.grouped_collection_select :user_id, Usertype.order(:utype), :users, :utype,:id, :username,:include_blank => false, class: 'form-control'  %><br>
+			<%= grouped_collection_select :user, :user_id, User.where("teamlead_id = ? ", current_user), :members, :username,:id, :username,:include_blank => false, class: 'form-control'  %><br>
+
+			<%= t.grouped_collection_select :user_id, Usertype.where("utype= ? or utype=?", "developer","tester"), :users, :utype,:id, :username,:include_blank => false, class: 'form-control'  %><br>
 		</div>
 
-		<!-- 
-		<div class="form-group">
-			<%= t.label :Developer %>
-			<%= t.collection_select :user_id, @dps, :id, :username,:include_blank => false, class: 'form-control'  %><br>
-		</div>
-
-		<div class="form-group">
-			<%= t.label :Tester %>
-			<%= t.collection_select :user_id, @tts, :id, :username,:include_blank => false, class: 'form-control'  %><br>
-		</div>
-		-->
+		
 
 		<div class="form-group">
 			<%= t.button :submit %>

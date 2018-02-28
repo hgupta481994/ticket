@@ -35,8 +35,8 @@ class TeamleadController < ApplicationController
 	def add_task
 		@rq  = Requirement.find(params[:id]) 
 		@emp = User.where("teamlead_id = ?", current_user.id)
-		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
-		@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
+		#@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
+		#@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
 		#@user = User.where(:teamlead_id => @emp.id)
 		@task= Task.new
 		

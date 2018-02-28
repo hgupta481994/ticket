@@ -49,7 +49,7 @@ class TaskController < ApplicationController
   
 
   def find_task
-  	@rq = task.find(params[:id])
+  	@rq = Task.find(params[:id])
   end
 
   private 
