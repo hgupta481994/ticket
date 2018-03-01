@@ -1,2 +1,48 @@
-<h3>What ? I am not completed yet!!</h3>
-<h4>You can checkback after Some days</h4>
+
+<div class=" ticket_items_wrapper"
+	<h2 class="ticket_list_title"> <%= @tk.name %> </h2>
+	<p class="ticket_list_sub_title"><%= @tk.description %></p>
+	<div class="ticket_item ">
+		<% if @tk.tasktype_id ==1 %>
+			Issue
+		<% elsif @tk.tasktype_id ==2 %>
+			Change Request
+		<% else %>
+			Enhancement
+		<% end %>
+	</div>
+	<div class="ticket_item ">
+		<%= @tk.updated_at  %>
+	</div>
+	<div class="ticket_item ">
+		<% if @tk.user_id and (@tk.user_id != @tk.teamlead_id) %>
+			<%= User.find(@tk.user_id).username%>
+		<% else %>
+			Not assigned 
+		<%end%>
+	</div>
+	<div class="ticket_item ">
+		
+			<% if @tk.user_id and User.find(@tk.user_id).usertype_id == 3  %>
+				Developer
+			<% elsif  @tk.user_id and User.find(@tk.user_id).usertype_id ==4  %>
+				Tester 
+			
+			
+		<%end%>
+	</div>
+	<div class="ticket_item ">
+	
+    	<%= @tk.end %>
+	</div>
+	<div class="ticket_item ">
+             
+    	<% if(@tk.status==false)%>
+	    	<%= "not done" %>
+	    <%else%>
+	    	<%= "done" %>
+    	<%end%>
+    </div>
+
+	<%=link_to ' Delete ', task_path(@tk), :method => :delete, data: {confirm: "Are you sure?"} %>			
+</div>

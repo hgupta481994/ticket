@@ -1,0 +1,43 @@
+<div class="col-sm-3" >
+		<div class="well">
+			<h3>Project ID</h3>
+			<%= @rq.id%>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+		<div class="well">
+			<h3>Project Name</h3>
+			<%= @rq.name %>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+		<div class="well">
+			<h3>Team Lead</h3>
+			<% if @rq.teamlead_id != nil %>
+				<%= Teamlead.find(@rq.teamlead_id).username%>
+			<% else %>
+				Not assigned 
+			<%end%>
+		</div>
+	</div>
+
+	<div class="col-sm-3" >
+		<div class="well">
+			<h3>Last Date</h3>
+			<%= @rq.end %>
+		</div>
+	</div>
+
+
+<div  >
+	<h3>Files</h3>
+	<%= @rq.avatar.url %>		
+</div>
+
+<div >
+	<h3>Project description</h3>
+	<p><%= @rq.description %></p>
+</div>
+

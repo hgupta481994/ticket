@@ -1,17 +1,17 @@
 
 
-
+<%session[:return_to] ||= request.referer%>
 <p class="bg-primary">Project Name</p>
 <h4><%=@rq.name%></h4>
 <div class="column" style="background-color:#eee;" >
     <h2>Tasks</h2>
     <div class="panel-body">
-		<%= button_to "Add Task", add_task_path(@rq), method: :get %>
+		<%= button_to "Add Task", add_task_path(@rq), method: :get, class: "button"  %>
 	</div>
 	
     <div>
     	<%= form_tag tl_assign_to_multiple_teamlead_index_path,  method: :put do %>
-  			<table class="table table-hover">
+  			<table class="table table-hover" Style="overflow-x:auto ;">
 			    <tr>
 			      <th></th>
 			      <th>Task ID</th>
@@ -19,6 +19,7 @@
 			      <th>Task Type</th>
 			      <th>Assigned Date</th>
 			      <th>Assigned to </th>
+			      <th>Assigne Type</th>
 			      <th>End Date</th>
 			      <th>Attachement</th>
 			      <th>Status</th>
@@ -36,11 +37,20 @@
 				    		<td>Enhancement</td>
 				    	<% end %>
 				    	<td><%= t.updated_at  %></td>
-				    	<% if t.user_id != t.teamlead_id %>
+				    	<% if t.user_id and (t.user_id != t.teamlead_id) %>
 				    		<td><%= User.find(t.user_id).username%></td>
 				    	<% else %>
 				    		<td>Not assigned </td>
 				    	<%end%>
+				    	<td>
+				    		<% if t.user_id and User.find(t.user_id).usertype_id == 3  %>
+				    			Developer
+				    		<% elsif  t.user_id and User.find(t.user_id).usertype_id ==4  %>
+				    			Tester 
+				    		
+				    		
+				    	<%end%>
+				    	</td>
 					    <td><%= t.end %></td>
 					    <td>         </td>
 					    <td><% if(t.status==false)%>
@@ -60,7 +70,7 @@
 				<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
 				<%= hidden_field_tag :id, 1%>
 				<%#collection_select(:employee, User.all,  :id, :username, prompt: " select user to assign ") %>
-				<%= submit_tag "Assign Task" %>
+				<%= submit_tag "Assign Task" , class:  "button"%>
 			<%end%>
 		<% end%>
 		

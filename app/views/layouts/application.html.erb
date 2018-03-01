@@ -23,16 +23,15 @@
   thead,tbody { display: block; }
 
   tbody {
-      height: 400px;       
+      height: 200px;       
       overflow-y: auto;    /* Trigger vertical scroll    */
-     overflow-x:auto ; 
+      overflow-x: auto ; 
   }
 
   table {
-    
       border-collapse: collapse;
       border-spacing: 0;
-      width: 100%;
+      width: auto%;
       border: 1px solid #ddd;
   }
 
@@ -54,7 +53,7 @@
     .sidenav {
       padding-top: 20px;
       background-color: #f1f1f1;
-      height: 120%;
+      height: 170%;
     }
     
     /* Set black background color, white text and some padding */
@@ -148,13 +147,13 @@
               <%= link_to "Tester", '/admin/tester' %>
            </div>
          </div>
-      <%else%>
+      <%elsif current_user.usertype_id == 2%>
         <div class="col-sm-2 sidenav">
           <div class="well">
-              
+           <%= link_to "Developers", '/teamlead/developers' %>
           </div>
           <div class="well">
-
+            <%= link_to "Tester", '/teamlead/tester' %>  
           </div>
         </div>
       <%end%>

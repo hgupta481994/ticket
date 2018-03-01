@@ -29,7 +29,7 @@
 					<%end%>
 					<td><%= t.avatar.url %></td>
 					<td><%= link_to "Edit", edit_requirement_path(t) %></td>
-					<td><%= link_to "Show", requirement_path(t) %></td>			    
+					<td><%= link_to "Show", showa_path(t) %></td>			    
 				</tr>
 			<% end %>
 		</table>
@@ -60,5 +60,7 @@
 				</tr>
 			<% end %>
 		</table>
+	<else>
+		
 	<% end %>
 <% end %>

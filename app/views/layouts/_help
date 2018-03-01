@@ -9,3 +9,9 @@
 OR OR OR OR
 <%= t.collection_select :user_id, @dps, :id, :username,:include_blank => false, class: 'form-control'  %>
 #
+
+#redirect to previous url
+session[:return_to] ||= request.referer
+
+redirect_to session.delete(:return_to)
+#

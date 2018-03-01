@@ -39,9 +39,16 @@ class TeamleadController < ApplicationController
 		#@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
 		#@user = User.where(:teamlead_id => @emp.id)
 		@task= Task.new
-		
-
 	end
+
+	def developer
+		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
+	end
+
+	def tester
+		@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
+	end
+
 
 	
 	private 

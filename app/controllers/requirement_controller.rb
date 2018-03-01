@@ -1,6 +1,6 @@
 class RequirementController < ApplicationController
 
-	before_action :find_requirement, only: [:show, :edit, :update, :destroy]
+	before_action :find_requirement, only: [:show, :showa,:edit, :update, :destroy]
  	
 	def index
   		@rqs= Requirement.all.order("created_at DESC") 
@@ -20,9 +20,15 @@ class RequirementController < ApplicationController
 	      render 'requirement/new'
 	    end
 	end 
+  def showa
+   
+    @dps = User.where("teamlead_id = ? and usertype_id = 3", @rq.teamlead_id)
+    @tts = User.where("teamlead_id = ? and usertype_id = 4", @rq.teamlead_id)
+  end
 
   def show
-  	
+    @dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
+    @tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
   end 
 
   def edit

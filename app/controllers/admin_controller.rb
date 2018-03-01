@@ -23,5 +23,6 @@ class AdminController < ApplicationController
 		redirect_to 'admin/teamlead'
 	end
 
+	
 end
 

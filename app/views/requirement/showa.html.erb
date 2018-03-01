@@ -1,0 +1,76 @@
+<div class="col-sm-3" >
+	
+		<h3>Project ID</h3>
+		<%= @rq.id%>
+	</div>
+
+	<div class="col-sm-3">
+	
+			<h3>Project Name</h3>
+			<%= @rq.name %>
+	
+	</div>
+
+	<div class="col-sm-3">
+		
+			<h3>Team Lead</h3>
+			<% if @rq.teamlead_id != nil %>
+				<%= Teamlead.find(@rq.teamlead_id).username%>
+			<% else %>
+				Not assigned 
+			<%end%>
+		
+	</div>
+
+	<div class="col-sm-3" >
+		
+			<h3>Last Date</h3>
+			<%= @rq.end %>
+		
+	</div>
+
+
+
+
+<div class="col-sm-12" style="background-color:#eee;">
+	<div class="well">
+		<h3>Project description</h3>
+		<%= @rq.description %>
+		
+	</div>
+</div>
+<br><br><br><br><br><br><br>
+<div class="col-sm-12" style="background-color:#ddd;" >
+	<h3>Files</h3>
+	<%= @rq.avatar.url %>		
+</div>
+
+<div class="row">	
+	<div class="col-sm-6" style="background-color:#eee;">	
+		<table style="border: none">
+			<tr>
+		      <th><h2>Testers</h2></th>
+		    </tr>
+			<% for u in @tts %>
+					<tr>
+						<td><%= u.username %> </td>
+					</tr>
+			<% end %>
+		</table>
+	</div>
+	<div class="col-sm-6" style="background-color:#ddd;">
+		<table >
+			<tr>
+		      <th><h2>Developers</h2></th>
+		    </tr>
+			<% for u in @dps %>
+					<tr>
+						<td><%= u.username %> </td>
+					</tr>
+			<% end %>
+		</table>
+	</div>
+</div>
+
+
+

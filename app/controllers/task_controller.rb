@@ -18,6 +18,7 @@ class TaskController < ApplicationController
 	    else
 	    	
 	    	flash[:notice] = "Task not created"
+        pry.binding
 	      	redirect_to make_task_tl_path(@tk.requirement_id)
 	    end
 	end 
@@ -32,16 +33,16 @@ class TaskController < ApplicationController
 
   def update
   	
-  	if @rq.update_attributes(task_params)
-  		redirect_to(:action =>'show', :id => @rq.id)
+  	if @tk.update_attributes(task_params)
+  		redirect_to(:action =>'show', :id => @tk.id)
   	else
   		render 'task/edit'
   	end
   end
 
   def destroy
-  	@rq.destroy
-  	redirect_to 'root'
+  	@tk.destroy
+    redirect_to session.delete(:return_to)
   end
 
 
@@ -49,7 +50,7 @@ class TaskController < ApplicationController
   
 
   def find_task
-  	@rq = Task.find(params[:id])
+  	@tk = Task.find(params[:id])
   end
 
   private 

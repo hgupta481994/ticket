@@ -1,6 +1,6 @@
 
 
-<h2 style=" color:blue;"> Project name --> <%=@rq.name %> </h1>
+<h2 style=" color:#aa2340;"> Project name --> <%=@rq.name %> </h1>
 <h3> New Task </h2>
 
 <%= simple_form_for(@task, :url => '/task', method: :post) do |t| %> 
@@ -32,7 +32,7 @@
 			<%= t.label :Assign_Employee %>
 			<%= grouped_collection_select :user, :user_id, User.where("teamlead_id = ? ", current_user), :members, :username,:id, :username,:include_blank => false, class: 'form-control'  %><br>
 
-			<%= t.grouped_collection_select :user_id, Usertype.where("utype= ? or utype=?", "developer","tester"), :users, :utype,:id, :username,:include_blank => false, class: 'form-control'  %><br>
+			<%= t.grouped_collection_select :user_id, Usertype.where("utype= ? or utype=?", "developer","tester"), :users, :utype,:id, :username,:include_blank => true, class: 'form-control'  %><br>
 		</div>
 
 		

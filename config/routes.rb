@@ -8,6 +8,12 @@ Rails.application.routes.draw do
   get 'admin/teamlead' => 'admin#teamlead'
   get 'admin/developers' => 'admin#developer'
   get 'admin/tester' => 'admin#tester'
+  get 'admin/make_tt/:id' => 'admin#make_tt', as: :make_tt
+  get 'admin/make_dp/:id' => 'admin#make_dp', as: :make_dp
+  get 'admin/showa/:id' =>  'requirement#showa', as: :showa
+
+  get 'teamlead/tester' => 'teamlead#tester'
+  get 'teamlead/developers' => 'teamlead#developer'
 
   get 'make_task_tl/:id' => 'teamlead#make_task_tl', as: :make_task_tl
 
