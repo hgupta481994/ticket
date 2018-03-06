@@ -1,48 +1,113 @@
 
-<div class=" ticket_items_wrapper"
-	<h2 class="ticket_list_title"> <%= @tk.name %> </h2>
-	<p class="ticket_list_sub_title"><%= @tk.description %></p>
-	<div class="ticket_item ">
-		<% if @tk.tasktype_id ==1 %>
-			Issue
-		<% elsif @tk.tasktype_id ==2 %>
-			Change Request
-		<% else %>
-			Enhancement
-		<% end %>
+<div class=" ticket_items_wrapper">
+	<h2 > Name - <%= @tk.name %> </h2>
+
+
+	<div class="col-sm-12">
+		<div class="well">
+			Description - <%= @tk.description %>
+		</div>
 	</div>
-	<div class="ticket_item ">
-		<%= @tk.updated_at  %>
+
+	<div class="col-sm-3">
+		<div class="well">
+			Task Type - 
+			<% if @tk.tasktype_id ==1 %>
+				Issue
+			<% elsif @tk.tasktype_id ==2 %>
+				Change Request
+			<% else %>
+				Enhancement
+			<% end %>
+		</div>
 	</div>
-	<div class="ticket_item ">
-		<% if @tk.user_id and (@tk.user_id != @tk.teamlead_id) %>
-			<%= User.find(@tk.user_id).username%>
-		<% else %>
-			Not assigned 
-		<%end%>
+
+	<div class="col-sm-3 ">
+		<div class="well">
+			Created -
+			<%= @tk.updated_at.strftime(" %d-%m-%Y")  %>
+		</div>
 	</div>
-	<div class="ticket_item ">
-		
-			<% if @tk.user_id and User.find(@tk.user_id).usertype_id == 3  %>
-				Developer
-			<% elsif  @tk.user_id and User.find(@tk.user_id).usertype_id ==4  %>
-				Tester 
-			
-			
-		<%end%>
+
+	<div class="col-sm-3 ">
+		<div class="well">
+			Done upto - 
+	    	<%= @tk.end.strftime(" %d-%m-%Y") %>
+	    </div>
 	</div>
-	<div class="ticket_item ">
+
+	<% if current_user.usertype_id == 2 or current_user.usertype_id == 1%>
+
+		<div class="col-sm-3 ">
+			<div class="well">
+				Assigne Type - 
+				<% if @tk.user_id and User.find(@tk.user_id).usertype_id == 3  %>
+					Developer
+				<% elsif  @tk.user_id and User.find(@tk.user_id).usertype_id ==4  %>
+					Tester 
+				
+				
+				<%end%>
+			</div>
+		</div>
+
+		<div class="col-sm-3 ">
+			<div class="well">
+				Assigned to -   
+				<% if @tk.user_id and (@tk.user_id != @tk.teamlead_id) %>
+					<%= User.find(@tk.user_id).username%>
+				<% else %>
+					Not assigned 
+				<%end%>
+			</div>
+		</div>
+	<% end%>
 	
-    	<%= @tk.end %>
-	</div>
-	<div class="ticket_item ">
-             
-    	<% if(@tk.status==false)%>
-	    	<%= "not done" %>
-	    <%else%>
-	    	<%= "done" %>
-    	<%end%>
+	<div class="col-sm-3 ">
+		<div class="well">
+  	        Status -    
+	    	<% if(@tk.status_id==nil)%>
+	    		Created
+	    	<%elsif(@tk.status_id==1) %>
+	    		Assigned
+	    	<%elsif(@tk.status_id==2) %>
+	    		Marked
+	    	<%elsif(@tk.status_id==3) %>
+	    		On-Review
+	    	<%elsif(@tk.status_id==4) %>
+	    		Reviewed
+	    	<%elsif(@tk.status_id==5) %>
+	    		Closed
+	    	<%elsif(@tk.status_id==6) %>
+	    		Reopened
+	    	<%else%>
+			<%end%>
+		</div>    	
     </div>
 
-	<%=link_to ' Delete ', task_path(@tk), :method => :delete, data: {confirm: "Are you sure?"} %>			
+    <% if current_user.usertype_id == 2 %>
+	    <div class="col-sm-6 ">
+			<div class="well">
+				<%@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)%>
+				<%@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)%>
+				<%= form_tag tl_assign_teamlead_index_path,  method: :put do %>
+				    <% if (@dps != nil) || (@tts != nil)%>
+						<% if @tk.status_id==nil or @tk.status_id==1 %>
+							<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
+						<%elsif @tk.status_id==2 or @tk.status_id==3 %>
+							<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
+						<% end%>
+						<%= hidden_field_tag :rid, @tk.requirement_id%>
+						<%= hidden_field_tag :tid, @tk.id%>
+						<%#collection_select(:employee, User.all,  :id, :username, prompt: " select user to assign ") %>
+						<%= submit_tag "Assign Task" , class:  "button2"%>
+					<%end%>
+				<%end%>
+			</div>
+		</div>
+
+
+	    <br><br><br><br><br><br><br><hr>
+		<%=button_to ' Delete ', task_path(@tk), :method => :delete, class: "button", data: {confirm: "Are you sure?"} %>
+	<%end%>			
 </div>

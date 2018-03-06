@@ -1,48 +1,53 @@
-<div class="col-sm-3" >
-	
+
+<div id="col3" class="col-sm-3" >
+	<div class="well" style="margin: 0; padding: 5; ">
 		<h3>Project ID</h3>
 		<%= @rq.id%>
 	</div>
+</div>
 
-	<div class="col-sm-3">
-	
-			<h3>Project Name</h3>
-			<%= @rq.name %>
-	
-	</div>
-
-	<div class="col-sm-3">
-		
-			<h3>Team Lead</h3>
-			<% if @rq.teamlead_id != nil %>
-				<%= Teamlead.find(@rq.teamlead_id).username%>
-			<% else %>
-				Not assigned 
-			<%end%>
-		
-	</div>
-
-	<div class="col-sm-3" >
-		
-			<h3>Last Date</h3>
-			<%= @rq.end %>
-		
-	</div>
-
-
-
-
-<div class="col-sm-12" style="background-color:#eee;">
+<div class="col-sm-3">
 	<div class="well">
-		<h3>Project description</h3>
+		<h3>Project Name</h3>
+		<%= @rq.name %>
+	</div>
+</div>
+
+<div class="col-sm-3">
+	<div class="well">
+		<h3>Team Lead</h3>
+		<% if @rq.teamlead_id != nil %>
+			<%= Teamlead.find(@rq.teamlead_id).username%>
+		<% else %>
+			Not assigned 
+		<%end%>
+	</div>
+</div>
+
+<div class="col-sm-3" >
+	<div class="well">
+		<h3>Last Date</h3>
+		<%= @rq.end %>
+	</div>
+</div>
+
+
+<br><br><br><br><br>
+
+<div class="col-sm-12" style="background-color:#eee;padding: 0 0">
+	<div class="well" Style="margin:0;">
+		<h3>Project Description</h3>
 		<%= @rq.description %>
 		
 	</div>
 </div>
+
 <br><br><br><br><br><br><br>
-<div class="col-sm-12" style="background-color:#ddd;" >
-	<h3>Files</h3>
-	<%= @rq.avatar.url %>		
+<div class="col-sm-12" style="background-color:#ddd; padding: 0 0" >
+	<div class="well" Style="margin:0;">
+		<h3>Files</h3>
+		<%= @rq.avatar.url %>	
+	</div>	
 </div>
 
 <div class="row">	
@@ -71,6 +76,73 @@
 		</table>
 	</div>
 </div>
+<br>
+<div class="col-sm-12" style="background-color:#eee;padding: 0 0">
+	<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
+	    <tr>
+	      <th>Task ID</th>
+	      <th>Task Name</th>
+	      <th>Task Type</th>
+	      <th>Assigned Date</th>
+	      <th>Assigned to </th>
+	      <th>Assigne Type</th>
+	      <th>End Date</th>
+	      
+	      <th>Status</th>
+	    </tr>
 
 
+	    <% if @tks != nil %>
+		    <% @tks.each do |t| %>
+			    <tr>
+		  			<td><%=t.id%></td>
+			    	<td><%= t.name %></td>
+			    	<% if t.tasktype_id ==1 %>
+			    		<td>Issue</td>
+			    	<% elsif t.tasktype_id ==2 %>
+			    		<td>Change Request</td>
+			    	<% else %>
+			    		<td>Enhancement</td>
+			    	<% end %>
+			    	<td><%= t.updated_at  %></td>
+			    	<% if t.user_id and (t.user_id != t.teamlead_id) %>
+			    		<td><%= User.find(t.user_id).username%></td>
+			    	<% else %>
+			    		<td>Not assigned </td>
+			    	<%end%>
+			    	<td>
+			    		<% if t.user_id and User.find(t.user_id).usertype_id == 3  %>
+			    			Developer
+			    		<% elsif  t.user_id and User.find(t.user_id).usertype_id ==4  %>
+			    			Tester 
+			    		
+			    		
+			    	<%end%>
+			    	</td>
+				    <td><%= t.end %></td>
+				    
+				    <td><% if(t.status_id==nil)%>
+				    		Created
+				    	<%elsif(t.status_id==1) %>
+				    		Assigned
+				    	<%elsif(t.status_id==2) %>
+				    		Marked
+				    	<%elsif(t.status_id==3) %>
+				    		On-Review
+				    	<%elsif(t.status_id==4) %>
+				    		Reviewed
+				    	<%elsif(t.status_id==5) %>
+				    		Closed
+				    	<%elsif(t.status_id==6) %>
+				    		Reopened
+				    	<%else%>
+			    		<%end%>
+		    		</td>
+			    	<td><%= link_to ' Show ', task_path(t)%></td>
+				</tr>
+			<% end%>
+		<% end %>
+	</table>
+</div>
 
+<td><%=button_to ' Delete Project', requirement_path(@rq), :method => :delete, data: {confirm: "Are you sure?"}, class: "button" %></td>

@@ -1,8 +1,8 @@
 
 
 <%session[:return_to] ||= request.referer%>
-<p class="bg-primary">Project Name</p>
-<h4><%=@rq.name%></h4>
+<h4 class="bg-primary">Project Name - <a href=" /requirement/<%=@rq.id%>" style="color:white" ><%=@rq.name%></a> </h4>
+
 <div class="column" style="background-color:#eee;" >
     <h2>Tasks</h2>
     <div class="panel-body">
@@ -11,7 +11,7 @@
 	
     <div>
     	<%= form_tag tl_assign_to_multiple_teamlead_index_path,  method: :put do %>
-  			<table class="table table-hover" Style="overflow-x:auto ;">
+  			<table class="table table-hover" Style="overflow-x:auto ; overflow-y:auto ;">
 			    <tr>
 			      <th></th>
 			      <th>Task ID</th>
@@ -21,7 +21,6 @@
 			      <th>Assigned to </th>
 			      <th>Assigne Type</th>
 			      <th>End Date</th>
-			      <th>Attachement</th>
 			      <th>Status</th>
 			    </tr>
 			    <% @tks.each do |t| %>
@@ -52,23 +51,37 @@
 				    	<%end%>
 				    	</td>
 					    <td><%= t.end %></td>
-					    <td>         </td>
-					    <td><% if(t.status==false)%>
-						    	<%= "not done" %>
-						    	<%else%>
-						    	<%= "done" %>
+
+					    <td><% if(t.status_id==nil)%>
+						    	Created
+					    	<%elsif(t.status_id==1) %>
+					    		Assigned
+					    	<%elsif(t.status_id==2) %>
+					    		Marked
+					    	<%elsif(t.status_id==3) %>
+					    		On-Review
+					    	<%elsif(t.status_id==4) %>
+					    		Reviewed
+					    	<%elsif(t.status_id==5) %>
+					    		Closed
+					    	<%elsif(t.status_id==6) %>
+					    		Reopened
+					    	<%else%>
 					    	<%end%>
 				    	</td>
+
 				    	<td><%= link_to ' Show ', task_path(t)%></td>
-				    	<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %>
+				    	<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %></td>
 					</tr>
 				<% end%>
 			</table>
 			<% if (@dps != nil) || (@tts != nil)%>
-				<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
+				
+					<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
 			
-				<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
-				<%= hidden_field_tag :id, 1%>
+					<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
+				
+				<%= hidden_field_tag :id, @rq.id%>
 				<%#collection_select(:employee, User.all,  :id, :username, prompt: " select user to assign ") %>
 				<%= submit_tag "Assign Task" , class:  "button"%>
 			<%end%>

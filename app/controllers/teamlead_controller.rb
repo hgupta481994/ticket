@@ -20,10 +20,36 @@ class TeamleadController < ApplicationController
 		else
 			if (params[:developer] != "" && params[:tasks_ids] != nil)
 							
-				Task.where(id: params[:tasks_ids]).update_all user_id: params[:developer]
+				Task.where(id: params[:tasks_ids]).update_all user_id:   params[:developer]
+				Task.where(id: params[:tasks_ids]).update_all status_id: 1
 	    		redirect_to make_task_tl_path(@rq.id)
 	    	elsif(params[:tester] != "" && params[:tasks_ids] != nil)
 	    		Task.where(id: params[:tasks_ids]).update_all user_id: params[:tester]
+	    		Task.where(id: params[:tasks_ids]).update_all status_id: 3
+	    		redirect_to make_task_tl_path(@rq.id)
+			else 
+				flash[:notice] =  "You Didn't selected any user or task"
+				redirect_to make_task_tl_path(@rq.id)
+			end
+		end
+	end
+
+	def tl_assign
+		@rq = Requirement.find(params[:rid])
+		if(params[:developer] != nil and params[:tester] != nil)
+			
+			flash[:notice] =  "You cannot select both developer and tester "
+			redirect_to make_task_tl_path(@rq.id)
+
+		else
+			if (params[:developer] != nil )
+							
+				Task.where(id: params[:tid]).update_all user_id:   params[:developer]
+				Task.where(id: params[:tid]).update_all status_id: 1
+	    		redirect_to make_task_tl_path(@rq.id)
+	    	elsif(params[:tester] != nil )
+	    		Task.where(id: params[:tid]).update_all user_id: params[:tester]
+	    		Task.where(id: params[:tid]).update_all status_id: 3
 	    		redirect_to make_task_tl_path(@rq.id)
 			else 
 				flash[:notice] =  "You Didn't selected any user or task"
@@ -35,8 +61,8 @@ class TeamleadController < ApplicationController
 	def add_task
 		@rq  = Requirement.find(params[:id]) 
 		@emp = User.where("teamlead_id = ?", current_user.id)
-		#@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
-		#@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
+		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
+		@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
 		#@user = User.where(:teamlead_id => @emp.id)
 		@task= Task.new
 	end

@@ -4,7 +4,7 @@ class RequirementController < ApplicationController
  	
 	def index
   		@rqs= Requirement.all.order("created_at DESC") 
-  	end
+  end
 
  	def new
   		@rq= current_user.requirements.build
@@ -15,30 +15,31 @@ class RequirementController < ApplicationController
     	if @rq.save
 	      flash[:notice] = "Project successfully created"
 	        
-	      redirect_to '/home'
+	      redirect_to root_path
 	    else
 	      render 'requirement/new'
 	    end
 	end 
+
   def showa
-   
     @dps = User.where("teamlead_id = ? and usertype_id = 3", @rq.teamlead_id)
     @tts = User.where("teamlead_id = ? and usertype_id = 4", @rq.teamlead_id)
+    @tks= Task.where(:requirement_id => params[:id])
   end
 
   def show
     @dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
     @tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
+    @tks= Task.where(:requirement_id => params[:id])
   end 
 
   def edit
   	
   end 
 
-  def update
-  	
+  def update	
   	if @rq.update_attributes(requirement_params)
-  		redirect_to(:action =>'show', :id => @rq.id)
+  		redirect_to(:action =>'showa', :id => @rq.id)
   	else
   		render 'requirement/edit'
   	end
@@ -46,12 +47,9 @@ class RequirementController < ApplicationController
 
   def destroy
   	@rq.destroy
-  	redirect_to 'root'
+  	redirect_to root_path
   end
 
-
-
-  
 
   def find_requirement
   	@rq = Requirement.find(params[:id])
@@ -59,6 +57,6 @@ class RequirementController < ApplicationController
 
   private 
     def requirement_params 
-    	 params.require(:requirement).permit(:name,:description,:avatar,:end, :teamlead_id) 
+    	 params.require(:requirement).permit(:name,:description,:end, :teamlead_id,:avatar) 
   	end
 end

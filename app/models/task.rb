@@ -1,5 +1,6 @@
 class Task < ApplicationRecord
 	belongs_to :user, optional: true
+	belongs_to :status, optional: true
 	belongs_to :tasktype
 	belongs_to :teamlead
 	belongs_to :requirement

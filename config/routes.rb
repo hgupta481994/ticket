@@ -26,8 +26,29 @@ Rails.application.routes.draw do
   resources :teamlead, only: [:tl_assign_to_multiple] do
     collection do
       put :tl_assign_to_multiple
+      put :tl_assign
     end
   end
+
+  resources :admin, only: [:edit_project_multiple, :update_project_multiple] do
+    collection do
+      get :edit_project_multiple, as: :edit_project_multiple
+      put :update_project_multiple, as: :update_project_multiple
+    end
+  end
+
+  resources :developer, only: [:done_multiple_update] do
+    collection do
+      put :done_multiple_update, as: :done_multiple_update
+    end
+  end
+
+  resources :tester, only: [:done_multiple_update] do
+    collection do
+      put :done_multiple_update, as: :done_multiple_update
+    end
+  end
+
   get 'add_task/:id' => 'teamlead#add_task', as: :add_task
   
 end

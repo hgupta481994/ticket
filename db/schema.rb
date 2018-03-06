@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180227081104) do
+ActiveRecord::Schema.define(version: 20180306064906) do
 
   create_table "attachements", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -41,6 +41,12 @@ ActiveRecord::Schema.define(version: 20180227081104) do
     t.index ["user_id"], name: "index_requirements_users_on_user_id"
   end
 
+  create_table "statuses", force: :cascade do |t|
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -53,7 +59,9 @@ ActiveRecord::Schema.define(version: 20180227081104) do
     t.integer "teamlead_id"
     t.integer "tasktype_id"
     t.integer "requirement_id"
+    t.integer "status_id"
     t.index ["requirement_id"], name: "index_tasks_on_requirement_id"
+    t.index ["status_id"], name: "index_tasks_on_status_id"
     t.index ["tasktype_id"], name: "index_tasks_on_tasktype_id"
     t.index ["teamlead_id"], name: "index_tasks_on_teamlead_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"

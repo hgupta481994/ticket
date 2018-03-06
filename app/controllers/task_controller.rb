@@ -18,7 +18,6 @@ class TaskController < ApplicationController
 	    else
 	    	
 	    	flash[:notice] = "Task not created"
-        pry.binding
 	      	redirect_to make_task_tl_path(@tk.requirement_id)
 	    end
 	end 

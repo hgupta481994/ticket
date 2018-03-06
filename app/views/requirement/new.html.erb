@@ -1,7 +1,7 @@
 
 
 	<%= simple_form_for(@rq,:url => '/requirement', method:  :post) do |r| %>
-	  	<%= r.input :avatar, label: 'Upload File', multiple: true %><br>
+	  	<%= r.input :avatar, label: 'Upload File' %><br>
 		<%= r.input :name, label: 'Project Name' %><br>
 		<%= r.input :description, label: 'Description',as: :text %><br>
 		<%= r.input :end, label: 'Last Date' %><br>

@@ -12,6 +12,6 @@ class EmployeeController < ApplicationController
 			@task.update_attribute(:user_id, @task.teamlead_id)
 		end 
   		@employee.destroy
-  		redirect_to "/"
+  		redirect_to root_path
 	end
 end

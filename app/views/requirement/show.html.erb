@@ -38,7 +38,7 @@
 </div>
 
 <div class="well">
-	<h3>Project description</h3>
+	<h3>Project Description</h3>
 	<%= @rq.description %>
 </div>
 
@@ -50,7 +50,7 @@
 	
     <div>
     	<%= form_tag tl_assign_to_multiple_teamlead_index_path,  method: :put do %>
-  			<table class="table table-hover" Style="overflow-x:auto ;">
+  			<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
 			    <tr>
 			      <th></th>
 			      <th>Task ID</th>
@@ -58,56 +58,76 @@
 			      <th>Task Type</th>
 			      <th>Assigned Date</th>
 			      <th>Assigned to </th>
-			      <th>Assigne Type</th>
+			      <th>Assignee type</th>
 			      <th>End Date</th>
-			      <th>Attachement</th>
 			      <th>Status</th>
 			    </tr>
-			    <% @tks.each do |t| %>
-				    <tr>
-					  	<td><%= check_box_tag "tasks_ids[]", t.id %></td>
-			  			<td><%=t.id%></td>
-				    	<td><%= t.name %></td>
-				    	<% if t.tasktype_id ==1 %>
-				    		<td>Issue</td>
-				    	<% elsif t.tasktype_id ==2 %>
-				    		<td>Change Request</td>
-				    	<% else %>
-				    		<td>Enhancement</td>
-				    	<% end %>
-				    	<td><%= t.updated_at  %></td>
-				    	<% if t.user_id and (t.user_id != t.teamlead_id) %>
-				    		<td><%= User.find(t.user_id).username%></td>
-				    	<% else %>
-				    		<td>Not assigned </td>
-				    	<%end%>
-				    	<td>
-				    		<% if t.user_id and User.find(t.user_id).usertype_id == 3  %>
-				    			Developer
-				    		<% elsif  t.user_id and User.find(t.user_id).usertype_id ==4  %>
-				    			Tester 
-				    		
-				    		
-				    	<%end%>
-				    	</td>
-					    <td><%= t.end %></td>
-					    <td>         </td>
-					    <td><% if(t.status==false)%>
-						    	<%= "not done" %>
-						    	<%else%>
-						    	<%= "done" %>
+
+			    <% if @tks != nil %>
+				    <% @tks.each do |t| %>
+					    <tr>
+						  	<td><%= check_box_tag "tasks_ids[]", t.id %></td>
+
+				  			<td><%=t.id%></td>
+
+					    	<td><%= t.name %></td>
+
+					    	<% if t.tasktype_id ==1 %>
+					    		<td>Issue</td>
+					    	<% elsif t.tasktype_id ==2 %>
+					    		<td>Change Request</td>
+					    	<% else %>
+					    		<td>Enhancement</td>
+					    	<% end %>
+
+					    	<td><%= t.updated_at  %></td>
+
+					    	<% if t.user_id and (t.user_id != t.teamlead_id) %>
+					    		<td><%= User.find(t.user_id).username%></td>
+					    	<% else %>
+					    		<td>Not assigned </td>
 					    	<%end%>
-				    	</td>
-				    	<td><%= link_to ' Show ', task_path(t)%></td>
-				    	<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %>
-					</tr>
-				<% end%>
+
+					    	<td>
+					    		<% if t.user_id and User.find(t.user_id).usertype_id == 3  %>
+					    			Developer
+					    		<% elsif  t.user_id and User.find(t.user_id).usertype_id ==4  %>
+					    			Tester
+					    		<% else%>
+					    			
+					    	<%end%>
+					    	</td>
+
+						    <td><%= t.end %></td>
+
+						    <td><% if(t.status_id==nil)%>
+							    	Created
+						    	<%elsif(t.status_id==1) %>
+						    		Assigned
+						    	<%elsif(t.status_id==2) %>
+						    		Marked
+						    	<%elsif(t.status_id==3) %>
+						    		On-Review
+						    	<%elsif(t.status_id==4) %>
+						    		Reviewed
+						    	<%elsif(t.status_id==5) %>
+						    		Closed
+						    	<%elsif(t.status_id==6) %>
+						    		Reopened
+						    	<%else%>
+						    	<%end%>
+					    	</td>
+					    	<td><%= link_to ' Show ', task_path(t)%></td>
+					    	<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %>
+						</tr>
+					<% end%>
+				<% end %>
 			</table>
 			<% if (@dps != nil) || (@tts != nil)%>
 				<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
 			
 				<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
-				<%= hidden_field_tag :id, 1%>
+				<%= hidden_field_tag :id, @rq.id%>
 				<%#collection_select(:employee, User.all,  :id, :username, prompt: " select user to assign ") %>
 				<%= submit_tag "Assign Task" , class:  "button"%>
 			<%end%>

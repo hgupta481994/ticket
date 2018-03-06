@@ -27,10 +27,26 @@
     img { width: 100% }
 }
 
+.button2 {
+  display: inline-block;
+  padding: 0px 0px;
+  font-size: 90%;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #6495ED;
+  background-color: #dddddd;
+  border: none;
+  
+  width: 10px;
+  
+}
+
 .button {
   display: inline-block;
-  padding: 15px 15px;
-  font-size: 24px;
+  padding: 5px 5px;
+  font-size: 150%;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
@@ -39,8 +55,8 @@
   background-color: #dddddd;
   border: none;
   border-radius: 15px;
-  width: 15px;
-  box-shadow: 0 5px #999;
+  width: 10px;
+  
 }
 .button:hover {
     background-color: #ddd;
@@ -50,6 +66,10 @@
 *= require devise_bootstrap_views
 *= require devise_bootstrap_views_less
 
+#col3{
+    margin:  0;
+    padding: 0 5;
+}
 
 /*################################# Child Mackenzie To do App CSS ###############################################*/
 
@@ -222,7 +242,7 @@ input[type="text"], textarea {
     margin: .5em 2% 1em 0;
     display: inline-block;
     background: rgba(250,250,250,.4);
-    height: 40px;
+    height: 50px;
     border-radius: 4px;
     padding: 1em 2em;
 }
