@@ -2,7 +2,7 @@
 <%session[:return_to] ||= request.referer%>
 <% if (current_user.present? )%> 
 	<%if (current_user.is_admin? == true ) %>
-		<%= button_to " New Project ","requirement/new",:method => :get%>
+		<%= button_to " New Project ","requirement/new",:method => :get , class: "button"%>
 		<%= form_tag edit_project_multiple_admin_index_path, method: :get do %>
 			<h4>All Projects</h4>
 			<table class="table table-hover">
@@ -33,7 +33,7 @@
 					</tr>
 				<% end %>
 			</table>
-			<%= submit_tag "Edit Selected" %>
+			<%= submit_tag "Edit Selected" , class: "button"%>
 		<% end %>
 
 

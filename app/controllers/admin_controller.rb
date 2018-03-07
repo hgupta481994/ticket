@@ -37,5 +37,15 @@ class AdminController < ApplicationController
     @rqs = Requirement.update(params[:projects].keys, params[:projects].values)
  		redirect_to root_path
   end
+
+  def assign_employee
+  	@employees= User.order("usertype_id")
+	@tl= Teamlead.find(params[:id])
+  end
+
+  def assign_employee_put
+  	@uassign = User.where(id: params[:employee_ids]).update_all teamlead_id: params[:tid]
+  	redirect_to assign_employee_path(params[:tid])
+  end
 end
 

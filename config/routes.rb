@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'admin/make_tt/:id' => 'admin#make_tt', as: :make_tt
   get 'admin/make_dp/:id' => 'admin#make_dp', as: :make_dp
   get 'admin/showa/:id' =>  'requirement#showa', as: :showa
+  get 'assign_employee/:id' =>'admin#assign_employee', as: :assign_employee
 
   get 'teamlead/tester' => 'teamlead#tester'
   get 'teamlead/developers' => 'teamlead#developer'
@@ -34,6 +35,7 @@ Rails.application.routes.draw do
     collection do
       get :edit_project_multiple, as: :edit_project_multiple
       put :update_project_multiple, as: :update_project_multiple
+      put :assign_employee_put,     as: :assign_employee_put
     end
   end
 

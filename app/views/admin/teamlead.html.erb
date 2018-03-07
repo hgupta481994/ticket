@@ -10,7 +10,7 @@
 				<tr>
 					<% if (t.username != 'admin') %>
 						<td><%= t.username %></td>
-						
+						<td><%= link_to 'Assign employees to TL', assign_employee_path(t) %>
 					<% end %>
 				</tr>
 			<% end %>

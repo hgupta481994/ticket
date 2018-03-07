@@ -30,7 +30,7 @@
 .button2 {
   display: inline-block;
   padding: 0px 0px;
-  font-size: 90%;
+  font-size:0.9em;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
@@ -46,7 +46,7 @@
 .button {
   display: inline-block;
   padding: 5px 5px;
-  font-size: 150%;
+  font-size: 0.9em;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
@@ -70,6 +70,8 @@
     margin:  0;
     padding: 0 5;
 }
+
+
 
 /*################################# Child Mackenzie To do App CSS ###############################################*/
 
