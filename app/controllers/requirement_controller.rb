@@ -30,6 +30,8 @@ class RequirementController < ApplicationController
   def show
     @dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
     @tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
+    @adps = User.where("teamlead_id = ? and usertype_id = 3", @rq.teamlead_id)
+    @atts = User.where("teamlead_id = ? and usertype_id = 4", @rq.teamlead_id)
     @tks= Task.where(:requirement_id => params[:id])
   end 
 

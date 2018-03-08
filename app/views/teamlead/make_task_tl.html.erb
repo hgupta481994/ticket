@@ -72,6 +72,9 @@
 
 				    	<td><%= link_to ' Show ', task_path(t)%></td>
 				    	<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %></td>
+				    	<% if t.status_id == 4 %>
+				    		<td><%=link_to ' Close ', close_task_path(t), :method => :patch, data: {confirm: "Are you sure?"} %></td>
+				    	<% end%>
 					</tr>
 				<% end%>
 			</table>

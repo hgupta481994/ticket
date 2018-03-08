@@ -20,12 +20,14 @@
 	2. Admin can make new projects.
 	3. Admin can assign projects to teamlead.
 	4. Admin can assign available developers and tester to teamlead.
+	5. Admin can reopen a closed task.
 
 
 	⋅⋅*  Team Lead
 	1. Team Lead can make Tasks from projects assigned to him.
 	2. Team lead can assign tasks to developers.
 	3. After task is done he can assign that task to tester assigned to him.
+	4. Team lead can close reviewed task.
 
 	⋅⋅*  Developers
 	1. He can mark task as done assigned to him.

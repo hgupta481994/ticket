@@ -14,6 +14,8 @@
 					<th>Last Date</th>
 					<th>Team Lead</th>
 					<th>Files</th>
+					<th></th>
+					<th></th>
 				</tr>
 				<% @rqs.each do |t| %>
 					<tr>
@@ -29,7 +31,7 @@
 						<%end%>
 						<td><%= t.avatar.url %></td>
 						<td><%= link_to "Edit", edit_requirement_path(t) %></td>
-						<td><%= link_to "Show", showa_path(t) %></td>			    
+						<<td><%= link_to "Show", requirement_path(t) %></td>			    
 					</tr>
 				<% end %>
 			</table>
@@ -47,6 +49,8 @@
 				<th>Project description</th>
 				<th>Last Date</th>
 				<th>Files</th>
+				<th></th>
+				<th></th>
 			</tr>
 			<% @rqs.each do |t| %>
 				<tr>
@@ -80,6 +84,7 @@
 				      <th>End Date</th>
 				      <th>Attachement</th>
 				      <th>Status</th>
+				      <th></th>
 				    </tr>
 
 
@@ -147,6 +152,7 @@
 				      <th>End Date</th>
 				      <th>Attachement</th>
 				      <th>Status</th>
+				      <th></th>
 				    </tr>
 
 

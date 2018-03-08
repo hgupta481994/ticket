@@ -13,7 +13,11 @@
  *= require_tree .
  *= require_self
  */
- 
+
+
+
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    
 .round-image-50 {
     background-color: white;
     border: 1px solid #d9d9d9;
@@ -54,7 +58,7 @@
   color: #6495ED;
   background-color: #dddddd;
   border: none;
-  border-radius: 15px;
+  border-radius: 150px;
   width: 10px;
   
 }

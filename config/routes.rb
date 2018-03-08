@@ -10,8 +10,8 @@ Rails.application.routes.draw do
   get 'admin/tester' => 'admin#tester'
   get 'admin/make_tt/:id' => 'admin#make_tt', as: :make_tt
   get 'admin/make_dp/:id' => 'admin#make_dp', as: :make_dp
-  get 'admin/showa/:id' =>  'requirement#showa', as: :showa
   get 'assign_employee/:id' =>'admin#assign_employee', as: :assign_employee
+   get 'admin/showa/:id' =>  'requirement#showa', as: :showa
 
   get 'teamlead/tester' => 'teamlead#tester'
   get 'teamlead/developers' => 'teamlead#developer'
@@ -23,6 +23,8 @@ Rails.application.routes.draw do
   delete 'admin/employee/:id' => 'employee#destroy',        as: :admin_employee
 
   resources :task
+  patch 'close_task/:id' => 'task#close_task', as: :close_task
+  patch 'reopen_task/:id' => 'task#reopen_task', as: :reopen_task
 
   resources :teamlead, only: [:tl_assign_to_multiple] do
     collection do

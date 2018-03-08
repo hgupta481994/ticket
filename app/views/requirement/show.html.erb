@@ -1,4 +1,4 @@
-
+<%session[:return_to] ||= request.referer%>
 	<div class="col-sm-3" >
 		<div class="well">
 			<h3>Project ID</h3>
@@ -27,116 +27,230 @@
 	<div class="col-sm-3" >
 		<div class="well">
 			<h3>Last Date</h3>
-			<%= @rq.end %>
+			<%= @rq.end.strftime(" %d-%m-%Y") %>
 		</div>
 	</div>
 
 
-<div  >
-	<h3>Files</h3>
-	<%= @rq.avatar.url %>		
-</div>
+<br><br><br><br><br>
 
-<div class="well">
-	<h3>Project Description</h3>
-	<%= @rq.description %>
-</div>
-
-<div class="column" style="background-color:#eee;" >
-    <h2>Tasks</h2>
-    <div class="panel-body">
-		<%= button_to "Add Task", add_task_path(@rq), method: :get, class: "button"  %>
-	</div>
-	
-    <div>
-    	<%= form_tag tl_assign_to_multiple_teamlead_index_path,  method: :put do %>
-  			<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
-			    <tr>
-			      <th></th>
-			      <th>Task ID</th>
-			      <th>Task Name</th>
-			      <th>Task Type</th>
-			      <th>Assigned Date</th>
-			      <th>Assigned to </th>
-			      <th>Assignee type</th>
-			      <th>End Date</th>
-			      <th>Status</th>
-			    </tr>
-
-			    <% if @tks != nil %>
-				    <% @tks.each do |t| %>
-					    <tr>
-						  	<td><%= check_box_tag "tasks_ids[]", t.id %></td>
-
-				  			<td><%=t.id%></td>
-
-					    	<td><%= t.name %></td>
-
-					    	<% if t.tasktype_id ==1 %>
-					    		<td>Issue</td>
-					    	<% elsif t.tasktype_id ==2 %>
-					    		<td>Change Request</td>
-					    	<% else %>
-					    		<td>Enhancement</td>
-					    	<% end %>
-
-					    	<td><%= t.updated_at  %></td>
-
-					    	<% if t.user_id and (t.user_id != t.teamlead_id) %>
-					    		<td><%= User.find(t.user_id).username%></td>
-					    	<% else %>
-					    		<td>Not assigned </td>
-					    	<%end%>
-
-					    	<td>
-					    		<% if t.user_id and User.find(t.user_id).usertype_id == 3  %>
-					    			Developer
-					    		<% elsif  t.user_id and User.find(t.user_id).usertype_id ==4  %>
-					    			Tester
-					    		<% else%>
-					    			
-					    	<%end%>
-					    	</td>
-
-						    <td><%= t.end %></td>
-
-						    <td><% if(t.status_id==nil)%>
-							    	Created
-						    	<%elsif(t.status_id==1) %>
-						    		Assigned
-						    	<%elsif(t.status_id==2) %>
-						    		Marked
-						    	<%elsif(t.status_id==3) %>
-						    		On-Review
-						    	<%elsif(t.status_id==4) %>
-						    		Reviewed
-						    	<%elsif(t.status_id==5) %>
-						    		Closed
-						    	<%elsif(t.status_id==6) %>
-						    		Reopened
-						    	<%else%>
-						    	<%end%>
-					    	</td>
-					    	<td><%= link_to ' Show ', task_path(t)%></td>
-					    	<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %>
-						</tr>
-					<% end%>
-				<% end %>
-			</table>
-			<% if (@dps != nil) || (@tts != nil)%>
-				<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
-			
-				<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
-				<%= hidden_field_tag :id, @rq.id%>
-				<%#collection_select(:employee, User.all,  :id, :username, prompt: " select user to assign ") %>
-				<%= submit_tag "Assign Task" , class:  "button"%>
-			<%end%>
-		<% end%>
+<div class="col-sm-12" style="background-color:#eee;padding: 0 0">
+	<div class="well" Style="margin:0;">
+		<h3>Project Description</h3>
+		<%= @rq.description %>
 		
 	</div>
 </div>
 
+<br><br><br><br><br><br><br>
+<div class="col-sm-12" style="background-color:#ddd; padding: 0 0" >
+	<div class="well" Style="margin:0;">
+		<h3>Files</h3>
+		<%= @rq.avatar.url %>	
+	</div>	
+</div>
 
+<% if current_user.usertype_id == 2 %>
+	<div class="column" style="background-color:#eee;" >
+	    <h2>Tasks</h2>
+	    <div class="panel-body">
+			<%= button_to "Add Task", add_task_path(@rq), method: :get, class: "button"  %>
+		</div>
+		
+	    <div>
+	    	<%= form_tag tl_assign_to_multiple_teamlead_index_path,  method: :put do %>
+	  			<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
+				    <tr>
+				      <th></th>
+				      <th>Task ID</th>
+				      <th>Task Name</th>
+				      <th>Task Type</th>
+				      <th>Assigned Date</th>
+				      <th>Assigned to </th>
+				      <th>Assignee type</th>
+				      <th>End Date</th>
+				      <th>Status</th>
+				      <th> </th>
+				      <th></th>
+				    </tr>
+
+				    <% if @tks != nil %>
+					    <% @tks.each do |t| %>
+						    <tr>
+							  	<td><%= check_box_tag "tasks_ids[]", t.id %></td>
+
+					  			<td><%=t.id%></td>
+
+						    	<td><%= t.name %></td>
+
+						    	<% if t.tasktype_id ==1 %>
+						    		<td>Issue</td>
+						    	<% elsif t.tasktype_id ==2 %>
+						    		<td>Change Request</td>
+						    	<% else %>
+						    		<td>Enhancement</td>
+						    	<% end %>
+
+						    	<td><%= t.updated_at.strftime(" %d-%m-%Y")  %></td>
+
+						    	<% if t.user_id and (t.user_id != t.teamlead_id) %>
+						    		<td><%= User.find(t.user_id).username%></td>
+						    	<% else %>
+						    		<td>Not assigned </td>
+						    	<%end%>
+
+						    	<td>
+						    		<% if t.user_id and User.find(t.user_id).usertype_id == 3  %>
+						    			Developer
+						    		<% elsif  t.user_id and User.find(t.user_id).usertype_id ==4  %>
+						    			Tester
+						    		<% else%>
+						    			
+						    	<%end%>
+						    	</td>
+
+							    <td><%= t.end.strftime(" %d-%m-%Y") %></td>
+
+							    <td><% if(t.status_id==nil)%>
+								    	Created
+							    	<%elsif(t.status_id==1) %>
+							    		Assigned
+							    	<%elsif(t.status_id==2) %>
+							    		Marked
+							    	<%elsif(t.status_id==3) %>
+							    		On-Review
+							    	<%elsif(t.status_id==4) %>
+							    		Reviewed
+							    	<%elsif(t.status_id==5) %>
+							    		Closed
+							    	<%elsif(t.status_id==6) %>
+							    		Reopened
+							    	<%else%>
+							    	<%end%>
+						    	</td>
+						    	<td><%= link_to ' Show ', task_path(t)%></td>
+						    	<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %></td>
+						    	<% if t.status_id == 4 %>
+						    		<td><%=link_to ' Close ', close_task_path(t), :method => :patch, data: {confirm: "Are you sure?"} %></td>
+						    	<% end %>
+							</tr>
+						<% end%>
+					<% end %>
+				</table>
+				<% if (@dps != nil) || (@tts != nil)%>
+					<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
+				
+					<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
+					<%= hidden_field_tag :id, @rq.id%>
+					<%#collection_select(:employee, User.all,  :id, :username, prompt: " select user to assign ") %>
+					<%= submit_tag "Assign Task" , class:  "button"%>
+				<%end%>
+			<% end%>
+			
+		</div>
+	</div>
+
+<% elsif current_user.usertype_id == 1%>
+	<div class="row">	
+		<div class="col-sm-6" style="background-color:#eee;">	
+			<table style="border: none">
+				<tr style="width: auto">
+			      <th>Testers</th>
+			    </tr>
+				<% for u in @atts %>
+						<tr>
+							<td><%= u.username %> </td>
+						</tr>
+				<% end %>
+			</table>
+		</div>
+		<div class="col-sm-6" style="background-color:#ddd;">
+			<table >
+				<tr>
+			      <th>Developers</th>
+			    </tr>
+				<% for u in @adps %>
+						<tr>
+							<td><%= u.username %> </td>
+						</tr>
+				<% end %>
+			</table>
+		</div>
+	</div>
+	<br>
+	<div class="col-sm-12" style="background-color:#eee;padding: 0 0">
+		<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
+		    <tr>
+		      <th>Task ID</th>
+		      <th>Task Name</th>
+		      <th>Task Type</th>
+		      <th>Assigned Date</th>
+		      <th>Assigned to </th>
+		      <th>Assigne Type</th>
+		      <th>End Date</th>
+		      <th>Status</th>
+		      <th></th>
+		    </tr>
+
+
+		    <% if @tks != nil %>
+			    <% @tks.each do |t| %>
+				    <tr>
+			  			<td><%=t.id%></td>
+				    	<td><%= t.name %></td>
+				    	<% if t.tasktype_id ==1 %>
+				    		<td>Issue</td>
+				    	<% elsif t.tasktype_id ==2 %>
+				    		<td>Change Request</td>
+				    	<% else %>
+				    		<td>Enhancement</td>
+				    	<% end %>
+				    	<td><%= t.updated_at.strftime(" %d-%m-%Y")  %></td>
+				    	<% if t.user_id and (t.user_id != t.teamlead_id) %>
+				    		<td><%= User.find(t.user_id).username%></td>
+				    	<% else %>
+				    		<td>Not assigned </td>
+				    	<%end%>
+				    	<td>
+				    		<% if t.user_id and User.find(t.user_id).usertype_id == 3  %>
+				    			Developer
+				    		<% elsif  t.user_id and User.find(t.user_id).usertype_id ==4  %>
+				    			Tester 
+				    		
+				    		
+				    	<%end%>
+				    	</td>
+					    <td><%= t.end.strftime(" %d-%m-%Y") %></td>
+					    
+					    <td><% if(t.status_id==nil)%>
+					    		Created
+					    	<%elsif(t.status_id==1) %>
+					    		Assigned
+					    	<%elsif(t.status_id==2) %>
+					    		Marked
+					    	<%elsif(t.status_id==3) %>
+					    		On-Review
+					    	<%elsif(t.status_id==4) %>
+					    		Reviewed
+					    	<%elsif(t.status_id==5) %>
+					    		Closed
+					    	<%elsif(t.status_id==6) %>
+					    		Reopened
+					    	<%else%>
+				    		<%end%>
+			    		</td>
+				    	<td><%= link_to ' Show ', task_path(t)%></td>
+				    	<% if t.status_id == 5 %>
+				    		<td><%=link_to ' Reopen ', reopen_task_path(t), :method => :patch, data: {confirm: "Are you sure?"} %></td>.
+				    	<% end %>
+					</tr>
+				<% end%>
+			<% end %>
+		</table>
+	</div>
+
+	<td><%=button_to ' Delete Project', requirement_path(@rq), :method => :delete, data: {confirm: "Are you sure?"}, class: "button" %></td>
+<% end %>
 <div>
 	<%= link_to "Back", :back %>
 </div>

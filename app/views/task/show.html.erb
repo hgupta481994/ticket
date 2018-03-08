@@ -92,15 +92,17 @@
 				<%@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)%>
 				<%= form_tag tl_assign_teamlead_index_path,  method: :put do %>
 				    <% if (@dps != nil) || (@tts != nil)%>
-						<% if @tk.status_id==nil or @tk.status_id==1 %>
+						<% if @tk.status_id==nil or @tk.status_id==1 or @tk.status_id==6%>
 							<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
+							<%= submit_tag "Assign Task" , class:  "button2"%>
 						<%elsif @tk.status_id==2 or @tk.status_id==3 %>
 							<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
+							<%= submit_tag "Assign Task" , class:  "button2"%>
 						<% end%>
 						<%= hidden_field_tag :rid, @tk.requirement_id%>
 						<%= hidden_field_tag :tid, @tk.id%>
 						<%#collection_select(:employee, User.all,  :id, :username, prompt: " select user to assign ") %>
-						<%= submit_tag "Assign Task" , class:  "button2"%>
+						
 					<%end%>
 				<%end%>
 			</div>
@@ -108,6 +110,6 @@
 
 
 	    <br><br><br><br><br><br><br><hr>
-		<%=button_to ' Delete ', task_path(@tk), :method => :delete, class: "button", data: {confirm: "Are you sure?"} %>
+		<%=button_to ' Delete this task ', task_path(@tk), :method => :delete, class: "button", data: {confirm: "Are you sure?"} %>
 	<%end%>			
 </div>
