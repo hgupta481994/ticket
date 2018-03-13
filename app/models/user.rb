@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  
+  
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
@@ -36,6 +38,30 @@ class User < ApplicationRecord
 
 		def is_admin?
 		    if self.isadmin
+		      return true
+		    else
+		      return false
+		    end
+	 	end
+
+	 	def is_tlead?
+		    if self.usertype_id == 2
+		      return true
+		    else
+		      return false
+		    end
+	 	end
+
+	 	def is_developer?
+		    if self.usertype_id == 3
+		      return true
+		    else
+		      return false
+		    end
+	 	end
+
+	 	def is_tester?
+		    if self.usertype_id == 4
 		      return true
 		    else
 		      return false

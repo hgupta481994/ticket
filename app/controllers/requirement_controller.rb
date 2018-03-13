@@ -1,4 +1,5 @@
 class RequirementController < ApplicationController
+  load_and_authorize_resource
 
 	before_action :find_requirement, only: [:show, :showa,:edit, :update, :destroy]
  	
@@ -41,7 +42,7 @@ class RequirementController < ApplicationController
 
   def update	
   	if @rq.update_attributes(requirement_params)
-  		redirect_to(:action =>'showa', :id => @rq.id)
+  		redirect_to(:action =>'show', :id => @rq.id)
   	else
   		render 'requirement/edit'
   	end

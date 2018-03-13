@@ -1,6 +1,7 @@
 class TeamleadController < ApplicationController
 
 	def make_task_tl
+		authorize! :read, User
 		@rq = Requirement.find(params[:id])
 		@tks= Task.where(:requirement_id => params[:id])
 		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
@@ -59,6 +60,7 @@ class TeamleadController < ApplicationController
 	end
 
 	def add_task
+		authorize! :create, Task
 		@rq  = Requirement.find(params[:id]) 
 		@emp = User.where("teamlead_id = ?", current_user.id)
 		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)

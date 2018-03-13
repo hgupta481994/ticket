@@ -1,5 +1,5 @@
 class TaskController < ApplicationController
-
+  load_and_authorize_resource
 	before_action :find_task, only: [:show, :edit, :update, :destroy, :reopen_task]
 
 	

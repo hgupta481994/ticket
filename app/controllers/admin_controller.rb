@@ -13,7 +13,7 @@ class AdminController < ApplicationController
 	end
 
 	def make_teamlead
-		
+		authorize! :create, Teamlead
 		@user = User.find(params[:id])
       	@user.usertype_id = 2
       	

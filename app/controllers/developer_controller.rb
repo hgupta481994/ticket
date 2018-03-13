@@ -1,4 +1,5 @@
 class DeveloperController < ApplicationController
+	
 	def done_multiple_update
 	 	@tasks= Task.where(id: params[:tasks_ids])
 		@tasks.each do |t|

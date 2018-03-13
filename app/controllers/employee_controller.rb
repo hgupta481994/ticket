@@ -1,4 +1,5 @@
 class EmployeeController < ApplicationController
+	
 	before_action :find_employee, only: [:show, :destroy]
 	
 	def find_employee
