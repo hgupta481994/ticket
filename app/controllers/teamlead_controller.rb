@@ -1,5 +1,5 @@
 class TeamleadController < ApplicationController
-
+	before_action() { authorize! :access, :teamlead }
 	def make_task_tl
 		authorize! :read, User
 		@rq = Requirement.find(params[:id])
@@ -12,6 +12,7 @@ class TeamleadController < ApplicationController
 	end
 
 	def tl_assign_to_multiple
+		authorize! :update, Task
 		@rq = Requirement.find(params[:id])
 		if(params[:developer] != "" and params[:tester] != "")
 			
@@ -36,6 +37,7 @@ class TeamleadController < ApplicationController
 	end
 
 	def tl_assign
+		authorize! :update, Task
 		@rq = Requirement.find(params[:rid])
 		if(params[:developer] != nil and params[:tester] != nil)
 			
@@ -70,10 +72,12 @@ class TeamleadController < ApplicationController
 	end
 
 	def developer
+		authorize! :read, User
 		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
 	end
 
 	def tester
+		authorize! :read, User
 		@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
 	end
 

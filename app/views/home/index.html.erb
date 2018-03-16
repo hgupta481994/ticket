@@ -1,4 +1,3 @@
-
 <%session[:return_to] ||= request.referer%>
 <% if (current_user.present? )%> 
 	<%if (current_user.is_admin? == true ) %>
@@ -31,7 +30,7 @@
 						<%end%>
 						<td><%= t.avatar.url %></td>
 						<td><%= link_to "Edit", edit_requirement_path(t) %></td>
-						<<td><%= link_to "Show", requirement_path(t) %></td>			    
+						<td><%= link_to "Show", requirement_path(t) %></td>			    
 					</tr>
 				<% end %>
 			</table>
@@ -79,6 +78,7 @@
 				      <th></th>
 				      <th>Task ID</th>
 				      <th>Task Name</th>
+				      <th>Project</th>
 				      <th>Task Type</th>
 				      <th>Assigned Date</th>
 				      <th>End Date</th>
@@ -108,6 +108,8 @@
 						    	<% else %>
 						    		<td>Enhancement</td>
 						    	<% end %>
+
+						    	<td><%=Requirement.find(t.requirement_id).name%></td>
 
 						    	<td><%= t.updated_at  %></td>
 
@@ -148,6 +150,7 @@
 				      <th>Task ID</th>
 				      <th>Task Name</th>
 				      <th>Task Type</th>
+				      <th>Project</th>
 				      <th>Assigned Date</th>
 				      <th>End Date</th>
 				      <th>Attachement</th>
@@ -176,6 +179,8 @@
 						    	<% else %>
 						    		<td>Enhancement</td>
 						    	<% end %>
+
+						    	<td><%=Requirement.find(t.requirement_id).name%></td>
 
 						    	<td><%= t.updated_at  %></td>
 
@@ -207,6 +212,6 @@
 			<% end%>
 		</div>
 	<% end %>
-	<%else%>
-		<h2>Please <%= link_to "Sign In", new_user_session_path  %></li> to continue.</h2>
+<%else%>
+		<h2>Please <%= link_to "Sign In", new_user_session_path  %> to continue.</h2>
 <% end %>

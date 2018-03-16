@@ -73,5 +73,6 @@ class User < ApplicationRecord
   has_and_belongs_to_many :requirements
   belongs_to :teamlead, optional: true
   belongs_to :usertype
+  has_many   :notifications
 
 end

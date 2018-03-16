@@ -3,20 +3,26 @@ class Ability
 
   def initialize(user)
      alias_action :create, :read, :update, :destroy, to: :crud
-    # Define abilities for the passed in user here. For example:
    
     user ||= User.new # guest user (not logged in)    
     if user.present?  # additional permissions for logged in users (they can manage their posts)
         can [:update, :read], [Task, Attachement], user_id: user.id 
-        can :read, Requirement , user_id: user.id
+        can :crud, Notification
+        #can :read, Requirement , user_id: user.id
         if user.is_admin?  # additional permissions for administrators
-            can :manage, [User, Requirement, Task, Teamlead, Attachement]
+            can :manage, [User, Requirement, Task, Teamlead, Attachement, Notification]
         elsif user.is_tlead?
-            can :crud, [Task, Attachement]
-            can :read, [Requirement], teamlead_id: user.id 
+            can [:crud, :close_task], [Task] , teamlead_id: User.find_by_username(user.username).id
+            can :crud, Attachement
+            can :read, [Requirement], teamlead_id: User.find_by_username(user.username).id
             can :read, User
+            can :crud, Notification
+            can :access, :teamlead
+        elsif user.is_tester?
+            can :access, :tester
+        elsif user.is_developer?
+            can :access, :developer
         end
-
     end
      
 

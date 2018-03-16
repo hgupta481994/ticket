@@ -29,6 +29,7 @@ class RequirementController < ApplicationController
   end
 
   def show
+    authorize! :show, Requirement
     @dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
     @tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
     @adps = User.where("teamlead_id = ? and usertype_id = 3", @rq.teamlead_id)
@@ -50,6 +51,13 @@ class RequirementController < ApplicationController
 
   def destroy
   	@rq.destroy
+
+    #==Notifications
+    @tl=User.find(current_user).id
+    str="Project: #{Requirement.find(@tk.requirement_id).name} has been deleted by you."
+    @n=Notification.create(:notice => str, :user_id => @tl)
+    @n.save!
+    
   	redirect_to root_path
   end
 

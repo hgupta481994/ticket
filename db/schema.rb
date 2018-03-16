@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180306064906) do
+ActiveRecord::Schema.define(version: 20180316053446) do
 
   create_table "attachements", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -19,6 +19,15 @@ ActiveRecord::Schema.define(version: 20180306064906) do
     t.string "avatar"
     t.integer "task_id"
     t.index ["task_id"], name: "index_attachements_on_task_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.string "notice"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "checked", default: false
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "requirements", force: :cascade do |t|

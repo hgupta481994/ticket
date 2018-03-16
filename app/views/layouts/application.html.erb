@@ -138,41 +138,50 @@
       </p>
 
 
-
-
       
       <%= yield %>
- 
-
-
-
 
 
 
     </div>
     <% if (current_user.present? )%> 
-      <%if (current_user.is_admin? == true ) %>
-         <div class="col-sm-2 sidenav">
-            <div class="well">
-              <%= link_to "Teamlead", '/admin/teamlead' %>  
-            </div>
-           <div class="well">
-              <%= link_to "Developers", '/admin/developers' %>  
-           </div>
-           <div class="well">
-              <%= link_to "Tester", '/admin/tester' %>
-           </div>
-         </div>
-      <%elsif current_user.usertype_id == 2%>
-        <div class="col-sm-2 sidenav">
+      <div class="col-sm-2 sidenav">
+        <div class="well">
+          
+          <%@count = Notification.where(:user_id => current_user.id, :checked => false.to_s).count%>
+         
+          <a href="/notification">
+            <%if @count != 0 %>
+              <button class="w3-btn w3-red", style="color: red;height: 3em; width: 9em;">Notifications
+              <strong><sup><span class="w3-badge w3-red" style="font-size: 2em; "><%=@count%></span></sup></strong>
+              </button>
+            <%else%>
+              <button class="w3-btn", style="height: 3em; width: 9em;">
+                
+                Notifications
+              </button>
+            <%end%>
+          </a>
+        </div>  
+        <%if (current_user.is_admin? == true ) %>
           <div class="well">
-           <%= link_to "Developers", '/teamlead/developers' %>
+            <%= link_to "Teamlead", '/admin/teamlead' %>  
+          </div>
+          <div class="well">
+            <%= link_to "Developers", '/admin/developers' %>  
+          </div>
+          <div class="well">
+            <%= link_to "Tester", '/admin/tester' %>
+          </div>
+        <%elsif current_user.usertype_id == 2%>
+          <div class="well">
+            <%= link_to "Developers", '/teamlead/developers' %>
           </div>
           <div class="well">
             <%= link_to "Tester", '/teamlead/tester' %>  
           </div>
-        </div>
-      <%end%>
+        <%end%>
+      </div>
     <%end%>
   </div>
 </div>

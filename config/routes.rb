@@ -5,6 +5,16 @@ Rails.application.routes.draw do
   root "home#index"
   get 'home' => 'home#index'
 
+  get '/notification' => 'home#notification', as: :notice
+  delete '/notification/:id' => 'notification#destroy', as: :notification
+  delete '/delete_all_notification/:id' => 'notification#delete_all', as: :delete_all
+
+  resources :home, only: [:delete_notice] do
+    collection do
+      delete :delete_notice
+    end
+  end
+
   get 'admin/teamlead' => 'admin#teamlead'
   get 'admin/developers' => 'admin#developer'
   get 'admin/tester' => 'admin#tester'
@@ -25,6 +35,8 @@ Rails.application.routes.draw do
   resources :task
   patch 'close_task/:id' => 'task#close_task', as: :close_task
   patch 'reopen_task/:id' => 'task#reopen_task', as: :reopen_task
+
+
 
   resources :teamlead, only: [:tl_assign_to_multiple] do
     collection do
@@ -52,6 +64,8 @@ Rails.application.routes.draw do
       put :done_multiple_update, as: :done_multiple_update
     end
   end
+
+  
 
   get 'add_task/:id' => 'teamlead#add_task', as: :add_task
   
