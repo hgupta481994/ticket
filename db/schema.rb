@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180316053446) do
+ActiveRecord::Schema.define(version: 20180323114159) do
 
   create_table "attachements", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -37,17 +37,15 @@ ActiveRecord::Schema.define(version: 20180316053446) do
     t.string "name"
     t.text "description"
     t.string "avatar"
-    t.integer "user_id"
     t.integer "teamlead_id"
     t.index ["teamlead_id"], name: "index_requirements_on_teamlead_id"
-    t.index ["user_id"], name: "index_requirements_on_user_id"
   end
 
-  create_table "requirements_users", id: false, force: :cascade do |t|
-    t.integer "requirement_id", null: false
-    t.integer "user_id", null: false
+  create_table "requirements_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "requirement_id"
     t.index ["requirement_id"], name: "index_requirements_users_on_requirement_id"
-    t.index ["user_id"], name: "index_requirements_users_on_user_id"
+    t.index ["user_id"],        name: "index_requirements_users_on_user_id"
   end
 
   create_table "statuses", force: :cascade do |t|
@@ -86,6 +84,8 @@ ActiveRecord::Schema.define(version: 20180316053446) do
     t.string "username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_teamleads_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

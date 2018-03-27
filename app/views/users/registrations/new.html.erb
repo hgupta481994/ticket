@@ -23,6 +23,12 @@
       </div><br>
 
       <div class="form-group">
+        <%= f.label :Select_type_of_user %><br />
+        <% @ut   = Usertype.where("id != ? and id!= ?",1,2)  %>
+        <%= f.collection_select :usertype_id, @ut, :id, :utype, prompt: " select user type ", class: 'form-control' %>
+      </div><br>
+
+      <div class="form-group">
         <%= f.label :password %>
         <% if @minimum_password_length %>
         <em>(<%= @minimum_password_length %> characters minimum)</em>
@@ -33,12 +39,6 @@
       <div class="form-group">
         <%= f.label :password_confirmation %><br />
         <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control' %>
-      </div><br>
-
-      <div class="form-group">
-        <%= f.label :Select_type_of_user %><br />
-        <% @ut   = Usertype.where("id != ? and id!= ?",1,2)  %>
-        <%= f.collection_select :usertype_id, @ut, :id, :utype, prompt: " select user type ", class: 'form-control' %>
       </div><br>
 
 

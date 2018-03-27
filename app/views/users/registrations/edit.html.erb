@@ -25,6 +25,12 @@
         <%= f.text_field :username, class: 'form-control' %>
       </div>
 
+      <div class="form-group">
+        <%= f.label :Select_type_of_user %><br />
+        <% @ut   = Usertype.where("id != ? and id!= ?",1,2)  %>
+        <%= f.collection_select :usertype_id, @ut, :id, :utype, prompt: " select user type ", class: 'form-control' %>
+      </div><br>
+
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
         <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
       <% end %>

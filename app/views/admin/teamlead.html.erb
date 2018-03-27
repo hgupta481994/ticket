@@ -1,22 +1,19 @@
-
-<br>
-	<div class="column" style="background-color:#fff;width:50%;">
-		<h2>Team Leads assigned</h2>
-		<table >
+<!-- All team lead *****************-->
+<div class="column" style="background-color:#fff;width:50%;">
+	<h2>Team Leads assigned</h2>
+	<table >
+		<tr>
+	      <th>Team Lead</th>
+	      <th> </th>
+	    </tr>
+		<% for t in @tls %>
 			<tr>
-		      <th>Team Lead</th>
-		      <th> </th>
-		    </tr>
-			<% for t in @tls %>
-				<tr>
-					<% if (t.username != 'admin') %>
-						<td><%= t.username %></td>
-						<td><%= link_to 'Assign employees to TL', assign_employee_path(t) %>
-					<% end %>
-				</tr>
-			<% end %>
-		</table>
-	</div>
-	
+				<td><%= t.username %></td>
+				<td><%= link_to 'Assign employees to TL', assign_employee_path(t) %>
+			</tr>
+		<% end %>
+	</table>
+</div>
 
-	
+
+

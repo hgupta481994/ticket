@@ -15,179 +15,115 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
-  * {
-      box-sizing: border-box;
-  }
-
-
-  tbody {
-      display: block;
-      height: 200px;       
-      overflow: auto;    /* Trigger vertical scroll    */
-      padding: 10px;
-  }
-
-
-  thead {
-    tr {
-      display: block;
-      position: relative;
+    * {
+        box-sizing: border-box;
     }
-  }
-
-
-  table {
-      border-collapse: collapse;
-      font-size: 1em;
-      border-spacing: 0;
-      width: auto;
-      padding: 10px;
-      border: 1px solid #ddd;
-  }
-
-  td {
-      text-align: left;
-      padding: 8px;
-  }
-  th{
-    text-align: center;
-    padding: 12px;
-    background-color: lightslategray;
-  }
-
-  .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-
-    }
-    
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
-    
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      background-color: #f1f1f1;
-      height: 170%;
-    }
-    
-    /* Set black background color, white text and some padding */
-    footer {
-      background-color: #555;
-      color: white;
-      padding: 15px;
-    }
-    
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;} 
-    }
- 
   </style>
 </head>
+
+
 <body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+      </div><!--div class="navbar-header"-->
 
+      <!--navigation bar -->
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><%= link_to "Home", root_path %></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <%if !current_user.present? %>
+            <li><%= link_to "Sign Up", new_user_registration_path %></li> 
+            <li><%= link_to "Sign In", new_user_session_path  %></li>
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-    </div>
-
-
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><%= link_to "Home", root_path %></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <%if !current_user.present? %>
-          <li><%= link_to "Sign Up", new_user_registration_path %></li> 
-          <li><%= link_to "Sign In", new_user_session_path  %></li>
-
-        <% else %>
-              <li><%= link_to "Profile", edit_user_registration_path %></li>
-              <li><%= link_to("Logout", destroy_user_session_path, method:  :delete) %></li>
-              <li class="round-image-50"><%= image_tag current_user.avatar.url(:thumb) %></li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
-</nav>
-  
-<div class="container-fluid text-center">    
-  <div class="row content">
-    <div class="col-sm-10 text-left"> 
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
-      <p>
-        <%if current_user.present? %>
-          <% if current_user.is_admin? %>
-            <p class="text-success"><%= "Hello Admin :"%> <%=current_user.username %></p>
           <% else %>
-            <p class="text-success"><%= " Signed in as :"%> <%=current_user.username %> </p>
+            <li><%= link_to "Profile", edit_user_registration_path %></li>
+            <li><%= link_to("Logout", destroy_user_session_path, method:  :delete) %></li>
+            <li class="round-image-50"><%= image_tag current_user.avatar.url(:thumb) %></li>
           <% end %>
-        <% end%>  
-      </p>
+        </ul>
+      </div><!--div class="collapse navbar-collapse"-->
+    </div><!--div class="container-fluid"-->
+  </nav><!--nav class="navbar navbar-inverse"-->
+  
+  <div class="container-fluid text-center">    
+    <div class="row content">
+      <div class="col-sm-10 text-left"> 
+        <p class="notice"><%= notice %></p>
+        <p class="alert"><%= alert %></p>
+        <p>
+          <!--Message on signing in-->
+          <%if current_user.present? %>
+            <% if current_user.is_admin? %>
+              <p class="text-success"><%= "Hello Manager:"%> <%=current_user.username %></p>
+            <% elsif current_user.is_tlead? %>
+              <p class="text-success"><%= " Signed in as Team Lead:"%> <%=current_user.username %> </p>
+            <% elsif current_user.is_developer? %>
+              <p class="text-success"><%= "Signed in as Developer:"%> <%=current_user.username %></p>
+            <% elsif current_user.is_tester? %>
+              <p class="text-success"><%= "Signed in as Tester:"%> <%=current_user.username %></p>
+            <% end %>
+          <% end%>  
+        </p>
 
 
-      
-      <%= yield %>
+        
+        <%= yield %>
 
 
 
-    </div>
-    <% if (current_user.present? )%> 
-      <div class="col-sm-2 sidenav">
-        <div class="well">
-          
-          <%@count = Notification.where(:user_id => current_user.id, :checked => false.to_s).count%>
-         
-          <a href="/notification">
-            <%if @count != 0 %>
-              <button class="w3-btn w3-red", style="color: red;height: 3em; width: 9em;">Notifications
-              <strong><sup><span class="w3-badge w3-red" style="font-size: 2em; "><%=@count%></span></sup></strong>
-              </button>
-            <%else%>
-              <button class="w3-btn", style="height: 3em; width: 9em;">
-                
-                Notifications
-              </button>
-            <%end%>
-          </a>
-        </div>  
-        <%if (current_user.is_admin? == true ) %>
-          <div class="well">
-            <%= link_to "Teamlead", '/admin/teamlead' %>  
-          </div>
-          <div class="well">
-            <%= link_to "Developers", '/admin/developers' %>  
-          </div>
-          <div class="well">
-            <%= link_to "Tester", '/admin/tester' %>
-          </div>
-        <%elsif current_user.usertype_id == 2%>
-          <div class="well">
-            <%= link_to "Developers", '/teamlead/developers' %>
-          </div>
-          <div class="well">
-            <%= link_to "Tester", '/teamlead/tester' %>  
-          </div>
-        <%end%>
-      </div>
-    <%end%>
-  </div>
-</div>
-<footer class="container-fluid text-center">
-  <p>Copyright@HimanshuG</p>
-</footer>
+      </div><!--div class="col-sm-10 text-left" -->
 
+      <% if (current_user.present? )%> 
+        <div class="col-sm-2 sidenav">
+          <div class="well">           
+            <a href="/notification">
+              <% count_function #application Helper to count unread notification %>
+              
+              <%if @count != 0 %>
+                <button class="w3-btn w3-red", style="color: red;height: 3em; width: 9em;">Notifications
+                <strong><sup><span class="w3-badge w3-red" style="font-size: 2em; "><%=@count%></span></sup></strong>
+                </button>
+              <%else%>
+                <button class="w3-btn", style="height: 3em; width: 9em;">
+                  
+                  Notifications
+                </button>
+              <%end%>
+            </a>
+          </div><!--div class="well"-->
+
+          <%if (current_user.is_admin? == true ) %>
+            <div class="well">
+              <%= link_to "Teamlead", '/admin/teamlead' %>  
+            </div><!--div class="well"-->
+            <div class="well">
+              <%= link_to "Developers", '/admin/developers' %>  
+            </div><!--div class="well"-->
+            <div class="well">
+              <%= link_to "Tester", '/admin/tester' %>
+            </div><!--div class="well"-->
+          <%elsif current_user.usertype_id == 2%>
+            <div class="well">
+              <%= link_to "Developers", '/teamlead/developers' %>
+            </div><!--div class="well"-->
+            <div class="well">
+              <%= link_to "Tester", '/teamlead/tester' %>  
+            </div><!--div class="well"-->
+          <%end%>
+        </div><!--div class="col-sm-2 sidenav"-->
+      <%end%>
+    </div><!--div class="row content"-->
+  </div><!--div class="container-fluid text-center>-->
+  <footer class="container-fluid fixed-bottom">
+    <p>Copyright@HimanshuG</p>
+  </footer>
 </body>
 </html>

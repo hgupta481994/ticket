@@ -1,13 +1,12 @@
-<div style="background-color:#fff;">
-		
-			<table >
+<div style="background-color:#fff;">		
+	<table >
+		<tr>
+	      <th>Developers</th>
+	    </tr>
+		<% for u in @dps %>
 				<tr>
-			      <th>Developers</th>
-			    </tr>
-				<% for u in @dps %>
-						<tr>
-							<td><%= u.username %> </td>
-						</tr>
-				<% end %>
-			</table>
+					<td><%= u.username %> </td>
+				</tr>
+		<% end %>
+	</table>
 </div>

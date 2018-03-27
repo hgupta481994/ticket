@@ -25,7 +25,8 @@ class TaskController < ApplicationController
 	end 
 
   def show
-  	
+  	@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
+    @tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
   end 
 
   def edit

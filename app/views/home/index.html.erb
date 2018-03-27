@@ -1,7 +1,10 @@
-<%session[:return_to] ||= request.referer%>
+<%session[:return_to] ||= request.referer%> <!--storing the url in the session hash, which is available across multiple requests -->
+
+
+<!--***************************************************If current user is admin**********************************-->
 <% if (current_user.present? )%> 
 	<%if (current_user.is_admin? == true ) %>
-		<%= button_to " New Project ","requirement/new",:method => :get , class: "button"%>
+		<%= button_to " New Project ","requirement/new",:method => :get , class: "button"%> <!-- Making new project -->
 		<%= form_tag edit_project_multiple_admin_index_path, method: :get do %>
 			<h4>All Projects</h4>
 			<table class="table table-hover">
@@ -22,13 +25,19 @@
 						<td><%=t.id%></td>
 						<td><%= t.name %></td>
 						<td><%= truncate(t.description, length: 20) %></td>
-						<td><%= t.end %></td>
+						<td><% if t.end != nil %>
+					    		<%= t.end.strftime(" %d-%m-%Y") %>
+					    	<% end %>
+						</td>
 						<% if t.teamlead_id != nil %>
-							<td><%= Teamlead.find(t.teamlead_id).username%></td>
+							<td><%= find_tlead(t) %></td>
 						<% else %>
 							<td>Not assigned </td>
 						<%end%>
-						<td><%= t.avatar.url %></td>
+						<td><% if t.avatar.url != nil %>
+								<%= link_to "Open", t.avatar.url, target: "_blank" %>	
+							<% end %>
+						</td>
 						<td><%= link_to "Edit", edit_requirement_path(t) %></td>
 						<td><%= link_to "Show", requirement_path(t) %></td>			    
 					</tr>
@@ -37,8 +46,8 @@
 			<%= submit_tag "Edit Selected" , class: "button"%>
 		<% end %>
 
-
-	<%elsif current_user.usertype_id == 2%>
+     <!--*********************************************If current user is team lead**********************************-->
+	<%elsif current_user.is_tlead?%>
 		<h4>All Projects</h4>
 		<table class="table table-hover">
 			<tr>
@@ -53,165 +62,47 @@
 			</tr>
 			<% @rqs.each do |t| %>
 				<tr>
-					<% if t.teamlead_id == Teamlead.find_by_username(current_user.username).id %>
-						<td><%= check_box_tag "project_ids[]", t.id %></td>
-						<td><%= t.id%></td>
-						<td><%= t.name %></td>
-						<td><%= truncate(t.description, length: 20) %></td>
-						<td><%= t.end %></td>
-						<td><%= truncate(t.avatar.url, length: 20) %></td>
-						<td><%= link_to "Show", requirement_path(t) %></td>		
-						<td><%= link_to "Make task ", make_task_tl_path(t), :method => :get %>
-		 				</td>	    
-					<%end%>
+					<td><%= check_box_tag "project_ids[]", t.id %></td>
+					<td><%= t.id%></td>
+					<td><%= t.name %></td>
+					<td><%= truncate(t.description, length: 20) %></td>
+					<td><% if t.end != nil %>
+					    	<%= t.end.strftime(" %d-%m-%Y") %>
+					    <% end %>
+					</td>
+					<td><% if t.avatar.url != nil %>
+							<%= link_to "Open", t.avatar.url, target: "_blank" %>	
+						<% end %>
+					</td>
+					<td><%= link_to "Show", requirement_path(t) %></td>		
+					<td><%= link_to "Make task ", make_task_tl_path(t), :method => :get %>
+	 				</td>
 				</tr>
 			<% end %>
 		</table>
 
-
-
-	<%elsif current_user.usertype_id == 3 %>
+	<!--*********************************************If current user is developer**************************************-->
+	<%elsif current_user.is_developer? %>
 		<div>
 			<%= form_tag done_multiple_update_developer_index_path,  method: :put do %>
 				<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
-				    <tr>
-				      <th></th>
-				      <th>Task ID</th>
-				      <th>Task Name</th>
-				      <th>Project</th>
-				      <th>Task Type</th>
-				      <th>Assigned Date</th>
-				      <th>End Date</th>
-				      <th>Attachement</th>
-				      <th>Status</th>
-				      <th></th>
-				    </tr>
-
-
-				    <% if @tks != nil %>
-					    <% @tks.each do |t| %>
-						    <tr>
-						    	<td>
-							    	<% if t.status_id ==1 or t.status_id == 2 %>
-							    		<%= check_box_tag "tasks_ids[]", t.id %>
-									<% end%>
-								</td>
-
-					  			<td><%=t.id%></td>
-
-						    	<td><%= t.name %></td>
-
-						    	<% if t.tasktype_id ==1 %>
-						    		<td>Issue</td>
-						    	<% elsif t.tasktype_id ==2 %>
-						    		<td>Change Request</td>
-						    	<% else %>
-						    		<td>Enhancement</td>
-						    	<% end %>
-
-						    	<td><%=Requirement.find(t.requirement_id).name%></td>
-
-						    	<td><%= t.updated_at  %></td>
-
-							    <td><%= t.end %></td>
-							    <td>         </td>
-							    <td><% if(t.status_id==nil)%>
-									    	Created
-								    	<%elsif(t.status_id==1) %>
-								    		Assigned
-								    	<%elsif(t.status_id==2) %>
-								    		Marked
-								    	<%elsif(t.status_id==3) %>
-								    		On-Review
-								    	<%elsif(t.status_id==4) %>
-								    		Reviewed
-								    	<%elsif(t.status_id==5) %>
-								    		Closed
-								    	<%elsif(t.status_id==6) %>
-								    		Reopened
-								    	<%else%>
-								    	<%end%>
-							    	</td>
-						    	<td><%= link_to ' Show ', task_path(t)%></td>
-							</tr>
-						<% end%>
-					<% end %>
+				    <%= render 'task_table'  %>		
 				</table>
 				<%= submit_tag "Toggle Tasks" %>
 			<% end%>
 		</div>
-
-	<%elsif current_user.usertype_id == 4%>
+	<!--*********************************************If current user is tester **************************************-->
+	<%elsif current_user.is_tester?%>
 		<div>
 			<%= form_tag done_multiple_update_tester_index_path,  method: :put do %>
 				<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
-				    <tr>
-				      <th></th>
-				      <th>Task ID</th>
-				      <th>Task Name</th>
-				      <th>Task Type</th>
-				      <th>Project</th>
-				      <th>Assigned Date</th>
-				      <th>End Date</th>
-				      <th>Attachement</th>
-				      <th>Status</th>
-				      <th></th>
-				    </tr>
-
-
-				    <% if @tks != nil %>
-					    <% @tks.each do |t| %>
-						    <tr>
-						    	<td>
-							    	<% if t.status_id ==3 or t.status_id == 4 %>
-							    		<%= check_box_tag "tasks_ids[]", t.id %>
-									<% end%>
-								</td>
-
-					  			<td><%=t.id%></td>
-
-						    	<td><%= t.name %></td>
-
-						    	<% if t.tasktype_id ==1 %>
-						    		<td>Issue</td>
-						    	<% elsif t.tasktype_id ==2 %>
-						    		<td>Change Request</td>
-						    	<% else %>
-						    		<td>Enhancement</td>
-						    	<% end %>
-
-						    	<td><%=Requirement.find(t.requirement_id).name%></td>
-
-						    	<td><%= t.updated_at  %></td>
-
-							    <td><%= t.end %></td>
-							    <td>         </td>
-							    <td><% if(t.status_id==nil)%>
-									    	Created
-								    	<%elsif(t.status_id==1) %>
-								    		Assigned
-								    	<%elsif(t.status_id==2) %>
-								    		Marked
-								    	<%elsif(t.status_id==3) %>
-								    		On-Review
-								    	<%elsif(t.status_id==4) %>
-								    		Reviewed
-								    	<%elsif(t.status_id==5) %>
-								    		Closed
-								    	<%elsif(t.status_id==6) %>
-								    		Reopened
-								    	<%else%>
-								    	<%end%>
-							    	</td>
-						    	<td><%= link_to ' Show ', task_path(t)%></td>
-							</tr>
-						<% end%>
-					<% end %>
+				    <%= render 'task_table'  %>	
 				</table>
 				<%= submit_tag "Toggle Tasks" %>
 			<% end%>
 		</div>
 	<% end %>
+	<!--*********************************************If current user is guest user **************************************-->
 <%else%>
-		<h2>Please <%= link_to "Sign In", new_user_session_path  %> to continue.</h2>
+	<h2>Please <%= link_to "Sign In", new_user_session_path  %> to continue.</h2>
 <% end %>

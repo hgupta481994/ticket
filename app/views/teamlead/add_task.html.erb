@@ -1,5 +1,4 @@
-
-
+<!--*********************************************** create new task*********************-->
 <h2 style=" color:#aa2340;"> Project name ==> <%=link_to @rq.name , requirement_path(@rq), style: " color:#aa2340;" %>  </h1>
 <h3> New Task </h2>
 
@@ -18,23 +17,23 @@
 		<div class="form-group">
 			<%= t.input :end, class: 'form-control'  %><br>
 		</div>
+		<!-- ****************Type of task *********************-->
 		<div class="form-group">
 			<%= t.label :Type_of_task %>
 			
-			<%= t.collection_select :tasktype_id, Tasktype.all, :id, :ttype, class: 'form-control'  %><br>
+			<%= t.collection_select :tasktype_id, @tasktype, :id, :ttype, class: 'form-control'  %><br>
 		</div>
+		<!-- ****************Hidden field for requirement_id and teamlead_id *********************-->
 		<div class="form-group">
 			<%= t.input :requirement_id, :as => :hidden, :input_html => { :value => @rq.id }%>
 			<%= t.input :teamlead_id, :as => :hidden, :input_html => { :value => current_user.id }%>
 		</div>
-
+		<!-- ****************Assign developers *********************-->
 		<div class="form-group">
 			<%= t.label :Assign_Developer %>
 			<%= t.collection_select :user_id, @dps, :id, :username, :include_blank => "Developers", class: 'form-control'  %><br>
 			
 		</div>
-
-		
 
 		<div class="form-group">
 			<%= t.button :submit %>

@@ -1,3 +1,4 @@
+<!-- ******************Form for deleting multiple selected ************-->
 <%= form_tag delete_notice_home_index_path, method: :delete do %>
 	<table class="table table-hover">
 		<tr>
@@ -8,8 +9,10 @@
 		<% @notices.each do |t| %>
 			<tr>
 				<td><%= check_box_tag "notice_ids[]", t.id %></td>
+				<!-- ********If it was read earlier ************-->
 				<%if t.checked == true %>
 					<td><%= t.notice %></td>
+				<!-- ********** If reading first time **********-->
 				<% else %>
 					<td><mark><%= t.notice %></mark></td>
 				<%end%>
@@ -19,9 +22,9 @@
 	</table>
 	<%= submit_tag "Delete Selected" ,data: {confirm: "Are you sure?"}, class: "button"%>
 <% end %>
-
+<!-- ****************** All notices are read ***************-->
 <%@notices.update_all checked: true%>
-
+<!-- *********************Delete all notices****************-->
 <div style="margin: 2em 0 0 0">
 	<%= button_to "Delete All", delete_all_path(current_user.id), method: :delete, data: {confirm: "Are you sure?"}, class: "danger"  %>
 </div>

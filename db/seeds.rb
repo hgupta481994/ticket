@@ -6,6 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+#***************************************For Usertype************************************#
 user = Usertype.new
 user.utype= "admin"
 user.save!
@@ -22,6 +23,32 @@ user = Usertype.new
 user.utype= "tester"
 user.save!
 
+#***************************************For Task status**********************************#
+status= Status.new
+status.status = "Assigned"
+status.save!
+ 
+status= Status.new
+status.status = "Marked"
+status.save!
+  
+status= Status.new
+status.status = "On_review"
+status.save!
+
+status= Status.new
+status.status = "Reviewed"
+status.save!
+
+status= Status.new
+status.status = "Closed"
+status.save!
+
+status= Status.new
+status.status = "Reopened"
+status.save!
+
+#***************************************For Admin****************************************#
 user = User.new
 user.email = 'admin@admin.com'
 user.password = '123456'

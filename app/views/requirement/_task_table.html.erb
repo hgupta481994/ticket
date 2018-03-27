@@ -1,0 +1,56 @@
+<tr>
+  <th></th>
+  <th>Task ID</th>
+  <th>Task Name</th>
+  <th>Task Type</th>
+  <th>Assigned Date</th>
+  <th>Assigned to </th>
+  <th>Assignee type</th>
+  <th>End Date</th>
+  <th>Status</th>
+  <th></th>
+  <th></th>
+</tr>
+
+<% if @tks != nil %>
+    <% @tks.each do |t| %>
+	    <tr>
+		  	<td><%= check_box_tag "tasks_ids[]", t.id %></td>
+
+			<td><%=t.id%></td>
+
+			<td><%= t.name %></td>
+
+			<td> <%= find_task_type(t)%> </td>
+
+			<td><%= t.updated_at.strftime(" %d-%m-%Y")  %></td>
+
+			
+			<td> <%= find_user(t) %> </td>
+
+			<td> <%= find_user_type(t) %> </td>
+
+			<td>
+				<% if t.end != nil %>
+		    		<%= t.end.strftime(" %d-%m-%Y") %>
+		    	<% end %>
+		    </td>
+		    <td> <%=find_status(t)%> </td>
+
+			<td><%= link_to ' Show ', task_path(t)%></td>
+
+			<% if current_user.is_tlead?%>
+				<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %></td>
+				<% if t.reviewed? %>
+					<td><%=link_to ' Close ', close_task_path(t), :method => :patch, data: {confirm: "Are you sure?"} %></td>
+				<% end %>
+
+			<% elsif current_user.is_admin?%>
+				<% if t.closed? %>
+				    <td><%=link_to ' Reopen ', reopen_task_path(t), :method => :patch, data: {confirm: "Are you sure?"} %></td>
+				 <% end %>
+			<% end %>
+
+		</tr>
+	<% end%>
+<%end%>

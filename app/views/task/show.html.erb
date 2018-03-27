@@ -1,107 +1,76 @@
 
 <div class=" ticket_items_wrapper">
 	<h2 > Name - <%= @tk.name %> </h2>
-
-
+	<!-- **************************Decription of task******************* -->
 	<div class="col-sm-12">
 		<div class="well">
 			Description - <%= @tk.description %>
 		</div>
 	</div>
-
+	<!-- **************************Type of task******************* -->
 	<div class="col-sm-3">
 		<div class="well">
 			Task Type - 
-			<% if @tk.tasktype_id ==1 %>
-				Issue
-			<% elsif @tk.tasktype_id ==2 %>
-				Change Request
-			<% else %>
-				Enhancement
-			<% end %>
+			<%= find_task_type(@tk) %>
 		</div>
 	</div>
-
+	<!-- **************************Updated at******************* -->
 	<div class="col-sm-3 ">
 		<div class="well">
 			Created -
 			<%= @tk.updated_at.strftime(" %d-%m-%Y")  %>
 		</div>
 	</div>
-
+	<!-- **************************End date******************* -->
 	<div class="col-sm-3 ">
 		<div class="well">
 			Done upto - 
-	    	<%= @tk.end.strftime(" %d-%m-%Y") %>
+			<% if @tk.end != nil %>
+		    	<td><%= @tk.end.strftime(" %d-%m-%Y") %></td>
+		    <% end %>
 	    </div>
 	</div>
-
-	<% if current_user.usertype_id == 2 or current_user.usertype_id == 1%>
+	<!-- **************************If current user is tlead or admin ******************* -->
+	<% if current_user.is_tlead? or current_user.is_admin?%>
 
 		<div class="col-sm-3 ">
 			<div class="well">
 				Assigne Type - 
-				<% if @tk.user_id and User.find(@tk.user_id).usertype_id == 3  %>
-					Developer
-				<% elsif  @tk.user_id and User.find(@tk.user_id).usertype_id ==4  %>
-					Tester 
-				
-				
-				<%end%>
+				<%= find_user_type(@tk) %>
 			</div>
 		</div>
 
 		<div class="col-sm-3 ">
 			<div class="well">
 				Assigned to -   
-				<% if @tk.user_id and (@tk.user_id != @tk.teamlead_id) %>
-					<%= User.find(@tk.user_id).username%>
-				<% else %>
-					Not assigned 
-				<%end%>
+				<%= find_user(@tk)%> 
 			</div>
 		</div>
 	<% end%>
-	
+	<!-- **************************Sattus of task******************* -->
 	<div class="col-sm-3 ">
 		<div class="well">
   	        Status -    
-	    	<% if(@tk.status_id==nil)%>
-	    		Created
-	    	<%elsif(@tk.status_id==1) %>
-	    		Assigned
-	    	<%elsif(@tk.status_id==2) %>
-	    		Marked
-	    	<%elsif(@tk.status_id==3) %>
-	    		On-Review
-	    	<%elsif(@tk.status_id==4) %>
-	    		Reviewed
-	    	<%elsif(@tk.status_id==5) %>
-	    		Closed
-	    	<%elsif(@tk.status_id==6) %>
-	    		Reopened
-	    	<%else%>
-			<%end%>
+	    	<%= find_status(@tk) %>
 		</div>    	
     </div>
-
-    <% if current_user.usertype_id == 2 %>
+    <!-- *******************************************If current user is tlead***************************** -->
+    <% if current_user.is_tlead? %>
 	    <div class="col-sm-6 ">
 			<div class="well">
-				<%@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)%>
-				<%@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)%>
 				<%= form_tag tl_assign_teamlead_index_path,  method: :put do %>
 				    <% if (@dps != nil) || (@tts != nil)%>
-						<% if @tk.status_id==nil or @tk.status_id==1 or @tk.status_id==6%>
-							<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
+						<% if @tk.created? or @tk.assigned? or @tk.reopened?%>
+							<%= select_tag("developer", options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
+							
 							<%= submit_tag "Assign Task" , class:  "button2"%>
-						<%elsif @tk.status_id==2 or @tk.status_id==3 %>
+						<%elsif @tk.marked? or @tk.on_review? %>
 							<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
+							
 							<%= submit_tag "Assign Task" , class:  "button2"%>
 						<% end%>
-						<%= hidden_field_tag :rid, @tk.requirement_id%>
-						<%= hidden_field_tag :tid, @tk.id%>
-						<%#collection_select(:employee, User.all,  :id, :username, prompt: " select user to assign ") %>
+						<%= hidden_field_tag :id, @tk.requirement_id%>
+						<%= hidden_field_tag :tasks_ids, @tk.id%>
 						
 					<%end%>
 				<%end%>

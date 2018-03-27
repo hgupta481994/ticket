@@ -1,4 +1,4 @@
-
+<!-- Available unassigned employees****************-->
 <div class="col-sm-6" style="background-color:#aaa;">
 	<h4> Following are the available employees </h4>
 	<div >
@@ -10,12 +10,10 @@
 				</tr>
 				<%  for e in @employees %>
 					<tr>
-						<% if e.teamlead_id == 1 && e.usertype_id!=1 && e.usertype_id!=2%> 	
-							<td><%= check_box_tag "employee_ids[]", e.id %></td>
-					    	<td><%= e.username%></td>
-					    	<td><%= Usertype.find(e.usertype_id).utype %></td>
-					    <% end %>
-					</tr>
+						<td><%= check_box_tag "employee_ids[]", e.id %></td>
+				    	<td><%= e.username%></td>
+				    	<td><%= find_usertype(e) %></td>
+				    </tr>
 				<% end %>
 			</table>
 			<%= hidden_field_tag(:tid, @tl.id) %>
@@ -23,6 +21,9 @@
 		<% end %>
 	</div>
 </div>
+<!--*************************-->
+
+<!-- Employee under this team leader****************-->
 <div class="col-sm-6" style="background-color:#ccc;padding-bottom: 40px; ">
 	<h4>Employees under this TL </h4>
 	<table >
@@ -30,13 +31,13 @@
 	      <th>Employees</th>
 	      <th></th>
 	    </tr>
-		<% for e in @employees %>
+	    
+		<% for e in @this_employees %>
 			<tr>
-				<% if e.teamlead_id == @tl.id %>
-					<td><%= e.username %> </td>
-					<td><%=Usertype.find(e.usertype_id).utype%></td>
-				<% end %>
+				<td><%= e.username %> </td>
+				<td><%= find_usertype(e)%></td>
 			</tr>
 		<% end %>
 	</table>
 </div>
+<!--*************************-->

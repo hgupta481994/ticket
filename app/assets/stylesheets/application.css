@@ -17,18 +17,90 @@
 
 
     /* Remove the navbar's default margin-bottom and rounded borders */ 
-    
+
+table 
+{
+  border-collapse: collapse;
+  font-size: 1em;
+  border-spacing: 0;
+  width: auto;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+tbody 
+{
+  display: block;
+  height: 300px;       
+  overflow: auto;    /* Trigger vertical scroll    */
+  padding: 10px;
+}
+
+
+thead         
+{
+  tr {
+    display: block;
+    position: relative;
+  }
+}
+
+th{
+  text-align: center;
+  padding: 12px;
+  background-color: lightslategray;
+}
+
+td 
+{
+  text-align: left;
+  padding: 8px;
+}
+
+
+.navbar 
+{
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+.row.content {height: 450px}
+
+/* Set gray background color and 100% height */
+.sidenav {
+  padding-top: 20px;
+  background-color: #f1f1f1;
+  height: 170%;
+}
+
+/* Set black background color, white text and some padding */
+footer {
+  background-color: #555;
+  color: white;
+  padding: 15px;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+  .sidenav {
+    height: auto;
+    padding: 15px;
+  }
+  .row.content {height:auto;} 
+}
+
 .round-image-50 {
-    background-color: white;
-    border: 1px solid #d9d9d9;
-    border-radius: 25px;
-    -moz-border-radius: 25px;
-    -webkit-border-radius: 25px;
-    height: 50px;
-    width: 50px;
-    overflow: hidden;
-    text-align: center;
-    img { width: 100% }
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 25px;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+  height: 50px;
+  width: 50px;
+  overflow: hidden;
+  text-align: center;
+  img { width: 100% }
 }
 
 .button2 {
@@ -108,7 +180,9 @@ html {
 }
 
 body {
-    height: 100%;
+  height: 100%;
+  padding:0; 
+  margin:0; 
   background:  linear-gradient(40deg, #ffffff 10%, #aaaaaa 100%);
   font-family: 'Lato', sans-serif;
 }

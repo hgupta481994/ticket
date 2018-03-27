@@ -1,28 +1,27 @@
-
+<!-- Edit multiple selected projects******************-->
 <h2> Edit Pojects </h2>
-		
-	<%= form_tag  update_project_multiple_admin_index_path, method: :put do %>
-		<%@rqs.each do |rq|%>
-			<%= fields_for "projects[]", rq do |r| %>
-				<br>
-				<h3> Project </h3>
+<%= form_tag  update_project_multiple_admin_index_path, method: :put do %>
+	<%@rqs.each do |rq|%>
+		<%= fields_for "projects[]", rq do |r| %>
+			<br>
+			<h3> Project : <%=rq.name %> </h3>
 
-				<%= r.file_field :avatar %>
+			<%= r.file_field :avatar %>
 
-			  	<%= r.label :Project_Name %><br>
-			  	<%= r.text_field :name %> <br>
-				
-				<%= r.label :Description %><br>
-				<%= r.text_area :description %><br>
-				
-				<%= r.label :Last_Date %><br>
-				<%= r.date_select :end %><br>
+		  	<%= r.label :Project_Name %><br>
+		  	<%= r.text_field :name %> <br>
+			
+			<%= r.label :Description %><br>
+			<%= r.text_area :description %><br>
+			
+			<%= r.label :Last_Date %><br>
+			<%= r.date_select :end %><br>
 
-				<%= r.label :Teamlead %><br>
-				<% @tl   = Teamlead.where("id != ?",1)  %>
-			    <%= r.collection_select :teamlead_id, @tl, :id, :username, prompt: " Select Team Lead " %><br>
-				
-			<% end %>
-		<% end%>
-		<%= submit_tag 'Edit Project' %>
-	<% end %>
+			<%= r.label :Teamlead %><br>
+			
+		    <%= r.collection_select :teamlead_id, @tl, :id, :username, prompt: " Select Team Lead " %><br>
+			
+		<% end %>
+	<% end%>
+	<%= submit_tag 'Edit Project' %>
+<% end %>
