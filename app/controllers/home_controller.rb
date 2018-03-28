@@ -3,11 +3,13 @@ class HomeController < ApplicationController
   def index
     if current_user.present?
       if current_user.usertype_id ==1
-    	 @rqs= current_user.requirements.order("created_at DESC")
+    	 @rqs= current_user.requirements.order("updated_at DESC")
       elsif current_user.usertype_id == 2
-        @rqs=Requirement.where("teamlead_id = ?", Teamlead.find_by_username(current_user.username).id )
+        @rqs=Requirement.where("teamlead_id = ?", Teamlead.find_by_username(current_user.username).id ).order("updated_at DESC")
+      elsif current_user.usertype_id == 3
+        @tks= Task.where(:developer_id => current_user ).order("updated_at DESC")
       else
-        @tks= Task.where(:user_id => current_user )
+        @tks= Task.where(:tester_id => current_user ).order("updated_at DESC")
       end
     end
   end

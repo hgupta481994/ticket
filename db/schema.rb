@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180323114159) do
+ActiveRecord::Schema.define(version: 20180328092959) do
 
   create_table "attachements", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20180323114159) do
     t.integer "user_id"
     t.integer "requirement_id"
     t.index ["requirement_id"], name: "index_requirements_users_on_requirement_id"
-    t.index ["user_id"],        name: "index_requirements_users_on_user_id"
+    t.index ["user_id"], name: "index_requirements_users_on_user_id"
   end
 
   create_table "statuses", force: :cascade do |t|
@@ -62,16 +62,18 @@ ActiveRecord::Schema.define(version: 20180323114159) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
     t.integer "teamlead_id"
     t.integer "tasktype_id"
     t.integer "requirement_id"
     t.integer "status_id"
+    t.integer "developer_id"
+    t.integer "tester_id"
+    t.index ["developer_id"], name: "index_tasks_on_developer_id"
     t.index ["requirement_id"], name: "index_tasks_on_requirement_id"
     t.index ["status_id"], name: "index_tasks_on_status_id"
     t.index ["tasktype_id"], name: "index_tasks_on_tasktype_id"
     t.index ["teamlead_id"], name: "index_tasks_on_teamlead_id"
-    t.index ["user_id"], name: "index_tasks_on_user_id"
+    t.index ["tester_id"], name: "index_tasks_on_tester_id"
   end
 
   create_table "tasktypes", force: :cascade do |t|

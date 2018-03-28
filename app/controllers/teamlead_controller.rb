@@ -4,11 +4,11 @@ class TeamleadController < ApplicationController
 	# ********************** Make Task show page ********************
 	def make_task_tl
 		authorize! :read, User
-		@dp_tks = Task.where("requirement_id == ?  and (status_id is null or status_id == 1 or status_id==6)", params[:id])
-    	@tt_tks = Task.where("requirement_id == ?  and (status_id == 2 or status_id==3)", params[:id])
+		@dp_tks = Task.where("requirement_id == ?  and (status_id is null or status_id == 1 or status_id==6)", params[:id]).order("updated_at DESC")
+    	@tt_tks = Task.where("requirement_id == ?  and (status_id == 2 or status_id == 3 or status_id == 4 or status_id == 5)", params[:id]).order("updated_at DESC")
 
-		@dps = User.where("teamlead_id = ? and usertype_id = 3", @rq.teamlead_id)
-		@tts = User.where("teamlead_id = ? and usertype_id = 4", @rq.teamlead_id)	 
+		@dps = User.where("teamlead_id = ? and usertype_id = 3", @rq.teamlead_id).order("updated_at DESC")
+		@tts = User.where("teamlead_id = ? and usertype_id = 4", @rq.teamlead_id).order("updated_at DESC")	 
 	end
 	# **********************Assign multiple tasks to employee*******************
 	def tl_assign_to_multiple
@@ -21,14 +21,27 @@ class TeamleadController < ApplicationController
 			# *********If developer is selected ********************
 			if (params[:developer] != "" && params[:tasks_ids] != nil)
 							
-				Task.where(id: params[:tasks_ids]).update_all user_id:   params[:developer]
+				Task.where(id: params[:tasks_ids]).update_all developer_id:   params[:developer]
 				Task.where(id: params[:tasks_ids]).update_all status_id: 1
 	    		redirect_to make_task_tl_path(@rq.id)
+	    		#==notifications
+			      @user= params[:developer]
+			      str="some tasks are assigned to you by TL: #{current_user.username}."
+			      @n=Notification.create(:notice => str, :user_id => @user)
+			      @n.save!
+
+
 	    	# ********If tester is selected ************************
 	    	elsif(params[:tester] != "" && params[:tasks_ids] != nil)
-	    		Task.where(id: params[:tasks_ids]).update_all user_id: params[:tester]
+	    		Task.where(id: params[:tasks_ids]).update_all tester_id: params[:tester]
 	    		Task.where(id: params[:tasks_ids]).update_all status_id: 3
 	    		redirect_to make_task_tl_path(@rq.id)
+	    		#==notifications
+			      @user= params[:tester]
+			      str="some tasks are assigned to you by TL: #{current_user.username}."
+			      @n=Notification.create(:notice => str, :user_id => @user)
+			      @n.save!
+
 	    	# If no task is selected or no employee is selected
 			else 
 				flash[:notice] =  "You Didn't selected any employee or task"
@@ -48,14 +61,25 @@ class TeamleadController < ApplicationController
 		else
 			# *********If developer is selected ********************
 			if (params[:developer] != nil )							
-				Task.where(id: params[:tasks_ids]).update_all user_id:   params[:developer]
+				Task.where(id: params[:tasks_ids]).update_all developer_id:   params[:developer]
 				Task.where(id: params[:tasks_ids]).update_all status_id: 1
 	    		redirect_to make_task_tl_path(@rq.id)
+	    		#==notifications
+			      @user= params[:developer]
+			      str="some tasks are assigned to you by TL: #{current_user.username}."
+			      @n=Notification.create(:notice => str, :user_id => @user)
+			      @n.save!
+
 			# ********If tester is selected ************************
 	    	elsif(params[:tester] != nil )
-	    		Task.where(id: params[:tasks_ids]).update_all user_id: params[:tester]
+	    		Task.where(id: params[:tasks_ids]).update_all tester_id: params[:tester]
 	    		Task.where(id: params[:tasks_ids]).update_all status_id: 3
 	    		redirect_to make_task_tl_path(@rq.id)
+	    		#==notifications
+			      @user= params[:tester]
+			      str="some tasks are assigned to you by TL: #{current_user.username}."
+			      @n=Notification.create(:notice => str, :user_id => @user)
+			      @n.save!
 			# If no task is selected or no employee is selected	    	
 			else 
 				flash[:notice] =  "You Didn't selected any employee or task"
@@ -67,22 +91,22 @@ class TeamleadController < ApplicationController
 	#********************************Add task to requirement ***********************
 	def add_task
 		authorize! :create, Task
-		@tasktype= Tasktype.all.order
-		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
-		@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
+		@tasktype= Tasktype.all
+		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id).order("updated_at DESC")
+		@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id).order("updated_at DESC")
 		@task= Task.new
 	end
 
 	# ****************************All developers under this TL**************************
 	def developer
 		authorize! :read, User
-		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
+		@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id).order("updated_at DESC")
 	end
 
 	# ****************************All testers under this TL**************************
 	def tester
 		authorize! :read, User
-		@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
+		@tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id).order("updated_at DESC")
 	end
 
 	# ****************************Find requirement**************************
@@ -90,9 +114,5 @@ class TeamleadController < ApplicationController
   		@rq = Requirement.find(params[:id])
  	end
 
-	private 
-	# ****************************Allowable parameters**************************
-    def task_params 
-    	 params.require(:task).permit(:name,:description,:avatar,:end, :teamlead_id,:start, :type_id, :requirement_id ) 
-  	end
+	
 end

@@ -9,18 +9,17 @@ module TaskHelper
 	    end 
 	end
 
-	def find_user_type(t)
-		if t.user_id and User.find(t.user_id).is_developer? 
-			@utype= "Developer"
-		elsif  t.user_id and User.find(t.user_id).is_tester?
-			@utype= "Tester"
+	def find_developer(t)
+		if t.developer_id and (t.developer_id != t.teamlead_id)
+			@user= User.find(t.developer_id).username
 		else
-		end		
+			@user= "Not assigned"
+		end
 	end
 
-	def find_user(t)
-		if t.user_id and (t.user_id != t.teamlead_id)
-			@user= User.find(t.user_id).username
+	def find_tester(t)
+		if t.tester_id and (t.tester_id != t.teamlead_id)
+			@user= User.find(t.tester_id).username
 		else
 			@user= "Not assigned"
 		end

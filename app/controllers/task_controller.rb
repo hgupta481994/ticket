@@ -5,28 +5,36 @@ class TaskController < ApplicationController
 	
  	
 	def index
-  		@tks= Taskall.order("created_at DESC") 
+  		@tks= Task.all.order("created_at DESC") 
   	end
 
 
 	def create
     	@tk = Task.new(task_params)
-      if @tk.user_id != nil
+      if @tk.developer_id != nil
         @tk.status_id = 1
+      else
+        @tk.developer_id = @tk.teamlead_id
     	end
+
+      if @tk.tester_id == nil
+         @tk.tester_id = @tk.teamlead_id
+      end
+     
     	if @tk.save
     		flash[:notice] = "Task successfully created"
 	        redirect_to make_task_tl_path(@tk.requirement_id)
-	    else
-	    	
+	    else	    	
 	    	flash[:notice] = "Task not created"
-	      	redirect_to make_task_tl_path(@tk.requirement_id)
+	      redirect_to make_task_tl_path(@tk.requirement_id)
 	    end
 	end 
 
   def show
-  	@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id)
-    @tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id)
+    if current_user.is_admin? or current_user.is_tlead?
+    	@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id).order("updated_at DESC")
+      @tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id).order("updated_at DESC")
+    end
   end 
 
   def edit
@@ -47,6 +55,7 @@ class TaskController < ApplicationController
 
     #==notifications
     @tl=User.find_by_username(current_user.username).id
+    #For Admin
     str="Task no #{@tk.id}  of Project #{Requirement.find(@tk.requirement_id).name} has been deleted by you."
     @n=Notification.create(:notice => str, :user_id => @tl)
     @n.save!
@@ -61,13 +70,14 @@ class TaskController < ApplicationController
     @tks.each do |t|
 
       #==notifications
-      @tl=User.find_by_username(current_user.username).id
+      @tl=User.find_by_username(current_user.username)
+      #For teamlead
       str="Task no #{t.id}  of Project #{Requirement.find(t.requirement_id).name} has been closed by you."
-      @n=Notification.create(:notice => str, :user_id => @tl)
+      @n=Notification.create(:notice => str, :user_id => @tl.id)
       @n.save!
-
+      #For admin
       str="Task no #{t.id}  of Project #{Requirement.find(t.requirement_id).name} has been closed by Team Lead: #{current_user.username}."
-      @n=Notification.create(:notice => str, :user_id => User.find_by_usertype_id( 1).id)
+      @n=Notification.create(:notice => str, :user_id => User.find(@tl.user_id).id)
       @n.save!
     end
       
@@ -83,10 +93,11 @@ class TaskController < ApplicationController
       #==notifications
       Task.where(id: params[:id]).update status_id: 6
       @tl=User.find_by_username(Teamlead.find(@tk.teamlead_id).username).id
+      #For teamlead
       str="Task no #{@tk.id}  of Project #{Requirement.find(@tk.requirement_id).name} has been reopened by Admin: #{current_user.username}."
       @n=Notification.create(:notice => str, :user_id => @tl)
       @n.save!
-
+      #For admin
       str="Task no #{@tk.id}  of Project #{Requirement.find(@tk.requirement_id).name} has been reopened by you."
       @n=Notification.create(:notice => str, :user_id => current_user.id)
       @n.save!
@@ -105,6 +116,6 @@ class TaskController < ApplicationController
 
   private 
     def task_params 
-    	 params.require(:task).permit(:name,:description,:avatar,:start,:end, :teamlead_id, :tasktype_id, :requirement_id, :user_id)
+    	 params.require(:task).permit(:name,:description,:avatar,:start,:end, :teamlead_id, :tasktype_id, :requirement_id, :developer_id, :tester_id)
 end
 end

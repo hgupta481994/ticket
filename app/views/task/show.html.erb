@@ -35,19 +35,19 @@
 
 		<div class="col-sm-3 ">
 			<div class="well">
-				Assigne Type - 
-				<%= find_user_type(@tk) %>
+				Developer Assigned -   
+				<%= find_developer(@tk)%> 
 			</div>
 		</div>
 
 		<div class="col-sm-3 ">
 			<div class="well">
-				Assigned to -   
-				<%= find_user(@tk)%> 
+				Tester Assigned  -   
+				<%= find_tester(@tk)%> 
 			</div>
 		</div>
 	<% end%>
-	<!-- **************************Sattus of task******************* -->
+	<!-- **************************Satatus of task******************* -->
 	<div class="col-sm-3 ">
 		<div class="well">
   	        Status -    
@@ -79,6 +79,8 @@
 
 
 	    <br><br><br><br><br><br><br><hr>
-		<%=button_to ' Delete this task ', task_path(@tk), :method => :delete, class: "button", data: {confirm: "Are you sure?"} %>
+	    <% if @tk.created? or @tk.assigned? or @tk.marked? %>
+			<%=button_to ' Delete this task ', task_path(@tk), :method => :delete, class: "button", data: {confirm: "Are you sure?"} %>
+		<% end %>
 	<%end%>			
 </div>

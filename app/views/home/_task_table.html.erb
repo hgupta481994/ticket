@@ -14,9 +14,15 @@
     <% @tks.each do |t| %>
 	    <tr>
 		  	<td>
-		    	<% if t.assigned? or t.marked? %>
-		    		<%= check_box_tag "tasks_ids[]", t.id %>
-				<% end%>
+				<% if current_user.is_developer? %>
+			    	<% if t.assigned? or t.marked? %>
+			    		<%= check_box_tag "tasks_ids[]", t.id %>
+					<% end%>
+				<% elsif current_user.is_tester? %>
+					<% if t.on_review? or t.reviewed? %>
+			    		<%= check_box_tag "tasks_ids[]", t.id %>
+					<% end%>
+				<% end %>
 			</td>
 
 			<td><%=t.id%></td>

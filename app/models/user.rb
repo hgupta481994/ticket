@@ -4,7 +4,8 @@ class User < ApplicationRecord
   # By default any new user who register has teamlead_id: 1 
   devise :database_authenticatable, :registerable,:recoverable, :rememberable, :trackable, :validatable
 
-  has_many :tasks
+  has_many :task_developers, :class_name => 'Task', :foreign_key => 'developer_id'
+  has_many :task_testers,    :class_name => 'Task', :foreign_key => 'tester_id'
   
   has_and_belongs_to_many :requirements
   

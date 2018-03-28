@@ -13,7 +13,13 @@ class RequirementController < ApplicationController
     	@rq = current_user.requirements.build(requirement_params) # Build requirement for current user
     	if @rq.save!
         current_user.requirements << @rq # push in join table of requirement and user
-
+        @tl = User.find_by_username(Teamlead.find(@rq.teamlead_id).username)
+        @rq.users << @tl
+        # notifications
+        
+        str="New Project: #{@rq.name} is assigned to you"
+        @n=Notification.create(:notice => str, :user_id => @tl)
+        @n.save!
 	      flash[:notice] = "Project successfully created"
 	        
 	      redirect_to root_path
@@ -27,15 +33,15 @@ class RequirementController < ApplicationController
   def show
     authorize! :show, Requirement
     
-    @dp_tks = Task.where("requirement_id == ?  and (status_id is null or status_id == 1 or status_id==6)", params[:id])
-    @tt_tks = Task.where("requirement_id == ?  and (status_id == 2 or status_id==3)", params[:id])
+    @dp_tks = Task.where("requirement_id == ?  and (status_id is null or status_id == 1 or status_id==6)", params[:id]).order("updated_at DESC")
+    @tt_tks = Task.where("requirement_id == ?  and (status_id == 2 or status_id == 3 or status_id == 4 or status_id == 5)", params[:id]).order("updated_at DESC")
     # For admin
     @a_tks  = Task.where(:requirement_id => params[:id]).order("status_id") 
     if @rq.teamlead_id != nil
       @tl  = Teamlead.find(@rq.teamlead_id)
     end
-    @dps = User.where("teamlead_id = ? and usertype_id = 3",  @rq.teamlead_id) #All developers of project 
-    @tts = User.where("teamlead_id = ? and usertype_id = 4",  @rq.teamlead_id) #All testers of project
+    @dps = User.where("teamlead_id = ? and usertype_id = 3",  @rq.teamlead_id).order("updated_at DESC") #All developers of project 
+    @tts = User.where("teamlead_id = ? and usertype_id = 4",  @rq.teamlead_id).order("updated_at DESC") #All testers of project
   end 
 
   # *****************************************update requirement********************
@@ -54,10 +60,9 @@ class RequirementController < ApplicationController
   def destroy
   	@rq.destroy
 
-    #==Notifications
-    @tl=User.find(current_user.id).id
+    #==Notifications for admin
     str="Project: #{@rq.name} has been deleted by you."
-    @n=Notification.create(:notice => str, :user_id => @tl)
+    @n=Notification.create(:notice => str, :user_id => current_user.id)
     @n.save!
     
   	redirect_to root_path
@@ -69,7 +74,7 @@ class RequirementController < ApplicationController
   end
   # ******************* Find Team leaders of current admin/manager ****************
   def find_all_tl
-     @tl   = Teamlead.where("id != ? and user_id == ?",1, current_user.id) 
+     @tl   = Teamlead.where("id != ? and user_id == ?",1, current_user.id).order("updated_at DESC") 
   end
   # ******************* Permitted parameters ****************
   private 

@@ -7,7 +7,7 @@ class Ability
     user ||= User.new               # guest user (not logged in)    
 
     if user.present?                # for logged in users 
-        can    [:update, :read], [Task, Attachement], user_id: user.id 
+        can    [:update, :read], [ Attachement], user_id: user.id 
         can    :crud, Notification
         cannot :crud, [Usertype, Status, Tasktype ]
         #can :read, Requirement , user_id: user.id
@@ -24,9 +24,11 @@ class Ability
 
         elsif user.is_tester?       # permissions for Team Lead
             can :access, :tester
+            can [:update, :read], [ Task], tester_id: user.id 
 
         elsif user.is_developer?    # permissions for Team Lead
             can :access, :developer
+            can [:update, :read], [ Task], developer_id: user.id 
         end
     end
      

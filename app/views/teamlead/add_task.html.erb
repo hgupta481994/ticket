@@ -31,8 +31,12 @@
 		<!-- ****************Assign developers *********************-->
 		<div class="form-group">
 			<%= t.label :Assign_Developer %>
-			<%= t.collection_select :user_id, @dps, :id, :username, :include_blank => "Developers", class: 'form-control'  %><br>
-			
+			<%= t.collection_select :developer_id, @dps, :id, :username, :include_blank => "Developers", class: 'form-control'  %><br>
+		</div>
+
+		<div class="form-group">
+			<%= t.label :Assign_Tester %>
+			<%= t.collection_select :tester_id, @tts, :id, :username, :include_blank => "Testers", class: 'form-control'  %><br>
 		</div>
 
 		<div class="form-group">
