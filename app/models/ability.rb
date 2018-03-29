@@ -16,9 +16,9 @@ class Ability
             can :manage, [User, Requirement, Task, Teamlead, Attachement, Notification]
 
         elsif user.is_tlead?        # permissions for Team Lead
-            can [:crud, :close_task], [Task] , teamlead_id: User.find_by_username(user.username).id
+            can [:crud, :close_task], [Task] , teamlead_id: Teamlead.find_by_username(user.username).id
             can :crud, Attachement
-            can :read, [Requirement], teamlead_id: User.find_by_username(user.username).id
+            can :read, [Requirement], teamlead_id: Teamlead.find_by_username(user.username).id
             can :read, User
             can :access, :teamlead
 

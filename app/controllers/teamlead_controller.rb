@@ -1,6 +1,7 @@
 class TeamleadController < ApplicationController
 	before_action() { authorize! :access, :teamlead }
 	before_action :find_requirement, only: [:make_task_tl, :tl_assign_to_multiple, :tl_assign, :add_task]
+	before_action :find_id_in_teamlead, only: [:add_task]
 	# ********************** Make Task show page ********************
 	def make_task_tl
 		authorize! :read, User
@@ -114,5 +115,8 @@ class TeamleadController < ApplicationController
   		@rq = Requirement.find(params[:id])
  	end
 
+ 	def find_id_in_teamlead
+ 		@teamlead= Teamlead.find_by_username(current_user.username)
+ 	end
 	
 end

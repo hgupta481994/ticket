@@ -8,11 +8,13 @@ class AdminController < ApplicationController
 	end
 
 	def developer
-		@ds= User.where(:usertype_id => 3).order("updated_at DESC")   #Return developers
+    # Return developer who are under teamleads of this manager and also who are not assigned
+		@ds = User.where(:teamlead_id => User.where("teamlead_id = ? or id = 1",current_user.id), :usertype_id => 3).order("updated_at DESC")   
 	end
 
 	def tester 
-		@ts= User.where(:usertype_id => 4).order("updated_at DESC") #Return testers
+    # Return tester who are under teamleads of this manager and also who are not assigned
+		@ts = User.where(:teamlead_id => User.where("teamlead_id = ? or id = 1",current_user.id), :usertype_id => 4).order("updated_at DESC").order("updated_at DESC") 
   end
 
 	def make_teamlead

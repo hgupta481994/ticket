@@ -11,6 +11,7 @@ class TaskController < ApplicationController
 
 	def create
     	@tk = Task.new(task_params)
+
       if @tk.developer_id != nil
         @tk.status_id = 1
       else
@@ -21,7 +22,7 @@ class TaskController < ApplicationController
          @tk.tester_id = @tk.teamlead_id
       end
      
-    	if @tk.save
+    	if @tk.save!
     		flash[:notice] = "Task successfully created"
 	        redirect_to make_task_tl_path(@tk.requirement_id)
 	    else	    	

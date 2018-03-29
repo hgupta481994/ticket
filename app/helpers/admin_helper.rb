@@ -11,4 +11,8 @@ module AdminHelper
 	def find_tlead(u)
 		@tl=Teamlead.find(u.teamlead_id).username	
 	end
+
+	def default_user()
+		@def_user = 1
+	end
 end

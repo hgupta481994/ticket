@@ -17,8 +17,8 @@ class RequirementController < ApplicationController
         @rq.users << @tl
         # notifications
         
-        str="New Project: #{@rq.name} is assigned to you"
-        @n=Notification.create(:notice => str, :user_id => @tl)
+        str="New Project: '#{@rq.name}' is assigned to you"
+        @n=Notification.create(:notice => str, :user_id => @tl.id)
         @n.save!
 	      flash[:notice] = "Project successfully created"
 	        
