@@ -8,16 +8,20 @@
   <th>Tester Assigned </th>
   <th>End Date</th>
   <th>Status</th>
-  <th> </th>
+  <th></th>
   <th></th>
 </tr>
 
 <% if @tks != nil %>
     <% @tks.each do |t| %>
 	    <tr>
-		  	<td><%= check_box_tag "tasks_ids[]", t.id %></td>
+		  	<td>
+		  		<% if !t.closed? %>
+		  			<%= check_box_tag "tasks_ids[]", t.id %>
+		  		<% end %>
+		  	</td>
 
-			<td><%=t.id%></td>
+			<td><%= t.id%></td>
 
 			<td><%= t.name %></td>
 
@@ -30,16 +34,19 @@
 
 			<td> <%= find_tester(t) %> </td>
 
-			<% if t.end != nil %>
-		    	<td><%= t.end.strftime(" %d-%m-%Y") %></td>
-		    <% end %>
-
+			<td>
+				<% if t.end != nil %>
+		    		<%= t.end.strftime(" %d-%m-%Y") %>
+		    	<% end %>
+		    </td>
 		    <td> <%=find_status(t)%> </td>
 
 			<td><%= link_to ' Show ', task_path(t)%></td>
 
 			<% if current_user.is_tlead?%>
-				<td><%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %></td>
+				<td><%if !t.closed? %>
+					<%=link_to ' Delete ', task_path(t), :method => :delete, data: {confirm: "Are you sure?"} %>
+				<% end %></td>
 				<% if t.reviewed? %>
 					<td><%=link_to ' Close ', close_task_path(t), :method => :patch, data: {confirm: "Are you sure?"} %></td>
 				<% end %>

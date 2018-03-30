@@ -63,61 +63,14 @@
 
 <!-- ********************************************If Current User is Team lead ***********************************-->
 <% if current_user.is_tlead? %>
-	<div class="column" style="background-color:#eee;" >
-	    <h2>Tasks</h2>
-    	<!--******************** Add task to current project******************** -->
-		<%= button_to "Add Task", add_task_path(@rq), method: :get, class: "button"  %> 
-		<!-- ************* Task table************-->
-	    <div>
-	    	<%= form_tag tl_assign_to_multiple_teamlead_index_path,  method: :put do %>
-	  			<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
-	  				<tr>
- 						<th colspan="3"> Developers</th>
- 					</tr>
-	  				<% @tks=@dp_tks %>
-	  				<%= render 'task_table' %>
-
-	  				<% if (@dps != nil) %>
-						<tr>
-							<td colspan="5">
-							<%= select_tag(:developer, options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>
-							<%= hidden_field_tag :id, @rq.id%>
-							<%= submit_tag "Assign Task" , class:  "button"%>
-							</td>
-						</tr>
-					<% end %>
-					<tr><td></td></tr>
-					<tr><td></td></tr>
-					<tr>
- 						<th colspan="3"> Testers</th>
- 					</tr>
-					<% @tks=@tt_tks %>
-	  				<%= render 'task_table' %>
-					
-					<% if (@tts != nil) %>
-						<tr>
-							<td colspan="5">
-							<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>
-							<%= hidden_field_tag :id, @rq.id%>
-							<%= submit_tag "Assign Task" , class:  "button"%>
-							</td>
-						</tr>
-					<% end %>
-				</table>
-			<% end%>
-		</div>
-	</div>
-	<div>
-		<%= link_to "Back", :back %>
-	</div>
-
-
+	
+	<center><h3 style="padding-top: 5em"><%= link_to "Tasks", make_task_tl_path(@rq.id), :method => :get, target: "_blank" %></h3></center>	
 
 <!-- ********************************************If Current User is Admin ***********************************-->
 <% elsif current_user.is_admin?%>
 	<div class="row">	
 		<div class="col-sm-6" style="background-color:#eee;">	
-			<table style="border: none">
+			<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
 				<tr style="width: auto">
 			      <th>Testers</th>
 			    </tr>
@@ -129,7 +82,7 @@
 			</table>
 		</div>
 		<div class="col-sm-6" style="background-color:#ddd;">
-			<table >
+			<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
 				<tr>
 			      <th>Developers</th>
 			    </tr>
@@ -145,7 +98,7 @@
 	<div class="col-sm-12" style="background-color:#eee;padding: 0 0">
 		<table class="table table-hover" Style="overflow-x:auto ;overflow-y:auto ;">
 		    <% @tks=@a_tks %>
-	  		<%= render 'task_table' %>
+	  		<%= render  template: '/teamlead/_task_table.html.erb' %>
 		</table>
 	</div>
 	<td><%=button_to ' Delete Project', requirement_path(@rq), :method => :delete, data: {confirm: "Are you sure?"}, class: "button" %></td>

@@ -11,19 +11,37 @@ class TaskController < ApplicationController
 
 	def create
     	@tk = Task.new(task_params)
-
+      @rq= Requirement.find(@tk.requirement_id)
       if @tk.developer_id != nil
         @tk.status_id = 1
+        if @rq.users.where(:id => @tk.developer_id).empty?
+          @rq.users << User.find(@tk.developer_id)
+        end
       else
         @tk.developer_id = @tk.teamlead_id
     	end
 
       if @tk.tester_id == nil
          @tk.tester_id = @tk.teamlead_id
+      else
+        if @rq.users.where(:id => @tk.tester_id).empty?
+          @rq.users << User.find(@tk.tester_id)
+        end
       end
      
     	if @tk.save!
     		flash[:notice] = "Task successfully created"
+        # notifications
+        
+        str="New Task: '#{@tk.name}' is assigned to you"
+        if @tk.developer_id != @tk.teamlead_id 
+          @n=Notification.create(:notice => str, :user_id => @tk.developer_id)
+          @n.save!
+        end
+        if @tk.tester_id != @tk.teamlead_id 
+          @n=Notification.create(:notice => str, :user_id => @tk.tester_id)
+          @n.save!
+        end
 	        redirect_to make_task_tl_path(@tk.requirement_id)
 	    else	    	
 	    	flash[:notice] = "Task not created"
@@ -32,7 +50,7 @@ class TaskController < ApplicationController
 	end 
 
   def show
-    if current_user.is_admin? or current_user.is_tlead?
+    if current_user.is_tlead?
     	@dps = User.where("teamlead_id = ? and usertype_id = 3", Teamlead.find_by_username(current_user.username).id).order("updated_at DESC")
       @tts = User.where("teamlead_id = ? and usertype_id = 4", Teamlead.find_by_username(current_user.username).id).order("updated_at DESC")
     end
@@ -78,7 +96,7 @@ class TaskController < ApplicationController
       @n.save!
       #For admin
       str="Task no #{t.id}  of Project #{Requirement.find(t.requirement_id).name} has been closed by Team Lead: #{current_user.username}."
-      @n=Notification.create(:notice => str, :user_id => User.find(@tl.user_id).id)
+      @n=Notification.create(:notice => str, :user_id => User.find(@tl.teamlead_id).id)
       @n.save!
     end
       

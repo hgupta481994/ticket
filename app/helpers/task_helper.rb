@@ -9,6 +9,10 @@ module TaskHelper
 	    end 
 	end
 
+	def find_project(t)
+		@rq= Requirement.find(t.requirement_id).name
+	end
+	
 	def find_developer(t)
 		if t.developer_id and (t.developer_id != t.teamlead_id)
 			@user= User.find(t.developer_id).username

@@ -40,8 +40,9 @@ class RequirementController < ApplicationController
     if @rq.teamlead_id != nil
       @tl  = Teamlead.find(@rq.teamlead_id)
     end
-    @dps = User.where("teamlead_id = ? and usertype_id = 3",  @rq.teamlead_id).order("updated_at DESC") #All developers of project 
-    @tts = User.where("teamlead_id = ? and usertype_id = 4",  @rq.teamlead_id).order("updated_at DESC") #All testers of project
+    @users = @rq.users #All employees related to project 
+    @dps = @users.where("usertype_id = 3").distinct #All developers of project 
+    @tts = @users.where("usertype_id = 4").distinct #All testers of project
   end 
 
   # *****************************************update requirement********************

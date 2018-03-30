@@ -21,12 +21,12 @@ class TeamleadController < ApplicationController
 		else
 			# *********If developer is selected ********************
 			if (params[:developer] != "" && params[:tasks_ids] != nil)
-							
+				@user= params[:developer]
+				@rq.users << @user							
 				Task.where(id: params[:tasks_ids]).update_all developer_id:   params[:developer]
 				Task.where(id: params[:tasks_ids]).update_all status_id: 1
 	    		redirect_to make_task_tl_path(@rq.id)
 	    		#==notifications
-			      @user= params[:developer]
 			      str="some tasks are assigned to you by TL: #{current_user.username}."
 			      @n=Notification.create(:notice => str, :user_id => @user)
 			      @n.save!
@@ -34,11 +34,12 @@ class TeamleadController < ApplicationController
 
 	    	# ********If tester is selected ************************
 	    	elsif(params[:tester] != "" && params[:tasks_ids] != nil)
+	    		@user= params[:tester]
+	    		@rq.users << @user
 	    		Task.where(id: params[:tasks_ids]).update_all tester_id: params[:tester]
 	    		Task.where(id: params[:tasks_ids]).update_all status_id: 3
 	    		redirect_to make_task_tl_path(@rq.id)
 	    		#==notifications
-			      @user= params[:tester]
 			      str="some tasks are assigned to you by TL: #{current_user.username}."
 			      @n=Notification.create(:notice => str, :user_id => @user)
 			      @n.save!
@@ -61,23 +62,25 @@ class TeamleadController < ApplicationController
 		
 		else
 			# *********If developer is selected ********************
-			if (params[:developer] != nil )							
+			if (params[:developer] != nil )	
+				@user= params[:developer]
+				@rq.users << @user						
 				Task.where(id: params[:tasks_ids]).update_all developer_id:   params[:developer]
 				Task.where(id: params[:tasks_ids]).update_all status_id: 1
 	    		redirect_to make_task_tl_path(@rq.id)
-	    		#==notifications
-			      @user= params[:developer]
+	    		#==notifications			     
 			      str="some tasks are assigned to you by TL: #{current_user.username}."
 			      @n=Notification.create(:notice => str, :user_id => @user)
 			      @n.save!
 
 			# ********If tester is selected ************************
 	    	elsif(params[:tester] != nil )
+	    		@user= params[:tester]
+	    		@rq.users << @user
 	    		Task.where(id: params[:tasks_ids]).update_all tester_id: params[:tester]
 	    		Task.where(id: params[:tasks_ids]).update_all status_id: 3
 	    		redirect_to make_task_tl_path(@rq.id)
-	    		#==notifications
-			      @user= params[:tester]
+	    		#==notifications			      
 			      str="some tasks are assigned to you by TL: #{current_user.username}."
 			      @n=Notification.create(:notice => str, :user_id => @user)
 			      @n.save!

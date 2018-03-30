@@ -1,6 +1,6 @@
 <!--*********************************************** create new task*********************-->
-<h2 style=" color:#aa2340;"> Project name ==> <%=link_to @rq.name , requirement_path(@rq), style: " color:#aa2340;" %>  </h1>
-<h3> New Task <%= @teamlead.id %></h2>
+<h2 style=" color:#aa2340;"> Project name: <%=link_to @rq.name , requirement_path(@rq), style: " color:#aa2340;" %>  </h1>
+<h3> New Task </h2>
 
 <%= simple_form_for(@task, :url => '/task', method: :post) do |t| %> 
 	<fieldset>
