@@ -215,116 +215,58 @@ body {
     padding: 1em 0;
 }
 
-.ticket_list_title {
-    text-align: center;
-    font-weight: 700;
-    font-size: 2.5rem;
-    text-transform: uppercase;
-    color: black;
-    margin: 0;
-    a {
-        text-decoration: none;
-        color: white;
-        transition: all .4s ease-in-out;
-        &:hover {
-            opacity: 0.4;
-        }
-    }
-}
 
-.ticket_list_sub_title {
-    margin: 0 0 3em 0;
-    text-align: center;
-    font-size: 0.9em;
-    color: $dark;
-    font-weight: 100;
-}
+
 
 .index_row {
-    padding: 2em;
-    border-bottom: 1px solid rgba(250,250,250, .3);
-    .ticket_list_sub_title {
-        margin-bottom: 0;
-    }
+  padding: 2em;
+  border-bottom: 1px solid rgba(250,250,250, .3);
+  .ticket_list_sub_title {
+      margin-bottom: 0;
+  }
 }
 
-#ticket_items_wrapper {
-    .row {
-        width: 100%;
-        border-top: 1px solid rgba(250,250,250, .3);
-        border-bottom: 1px solid rgba(250,250,250, .3);
-        .complete {
-            width: 10%;
-            float: left;
-            text-align: center;
-            border-right: 1px solid rgba(250,250,250, .3);
-            padding: 1em 0;
-        }
-        .ticket_item {
-            width: 80%;
-            float: left;
-            p {
-                margin: 0;
-                padding: 1em;
-                color: $dark;
-                font-weight: 100;
-            }
-        }
-        .trash {
-            width: 10%;
-            float: left;
-            text-align: center;
-            border-left: 1px solid rgba(250,250,250, .3);
-            padding: 1em 0;
-        }
-        i {
-            color: white;
-            transition: all .4s ease-in-out;
-            &:hover {
-                color: $dark;
-            }
-        }
-    }
-    #form {
-        margin-top: 2em;
-        padding: 0 5%;
-        input[type="text"] {
-            width: 72%;
-            margin-right: 2%;
-            display: inline-block;
-            
-            background: rgba(250,250,250,.4);
-            
-            height: 40px;
-            border-radius: 4px;
-            padding: 1em 2em;
-        }
-        input[type="submit"] {
-            background: rgba(250,250,250,.4);
-            
-            height: 40px;
-            border-radius: 4px;
-            width: 25%;
-            display: inline-block;
-            transition: all .4s ease-in-out;
-            cursor: pointer;
-            &:hover {
-                background: $dark;
-            }
-        }
-        ::-webkit-input-placeholder { color: $dark; }
-    }
+
+#form {
+  margin-top: 2em;
+  padding: 0 5%;
+  input[type="text"] {
+      width: 72%;
+      margin-right: 2%;
+      display: inline-block;
+      
+      background: rgba(250,250,250,.4);
+      
+      height: 40px;
+      border-radius: 4px;
+      padding: 1em 2em;
+  }
+  input[type="submit"] {
+      background: rgba(250,250,250,.4);
+      
+      height: 40px;
+      border-radius: 4px;
+      width: 25%;
+      display: inline-block;
+      transition: all .4s ease-in-out;
+      cursor: pointer;
+      &:hover {
+          background: $dark;
+      }
+  }
+  ::-webkit-input-placeholder { color: $dark; }
 }
+
 
 .links {
-    display: block;
-    margin: 1.5em auto 0 auto;
-    text-align: center;
-    font-size: 0.8em;
-    color: white;
-    a {
-        color: white;
-    }
+  display: block;
+  margin: 1.5em auto 0 auto;
+  text-align: center;
+  font-size: 0.8em;
+  color: white;
+  a {
+      color: white;
+  }
 }
 
 .forms {
@@ -345,20 +287,19 @@ input[type="text"], textarea {
 textarea {
     height: 200px;
 }
-input[type="submit"] {
-    
+input[type="submit"] {  
   
-    height: 40px;
-    border-radius: 4px;
-    width: 25%;
-    display: inline-block;
-    transition: all .4s ease-in-out;
-    cursor: pointer;
-    color: $dark;
-    &:hover {
-        background: $dark;
-        color: white;
-    }
+  height: 40px;
+  border-radius: 4px;
+  width: 25%;
+  display: inline-block;
+  transition: all .4s ease-in-out;
+  cursor: pointer;
+  color: $dark;
+  &:hover {
+      background: $dark;
+      color: white;
+  }
 }
 ::-webkit-input-placeholder { color: $dark; }
 

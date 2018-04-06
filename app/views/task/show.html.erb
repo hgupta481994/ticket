@@ -1,92 +1,91 @@
 
-<div class=" ticket_items_wrapper">
-	<h2 > Name: <%= @tk.name %> </h2>
-	<!-- **************************Decription of task******************* -->
-	<div class="col-sm-12">
-		<div class="well">
-			Description:  <%= @tk.description %>
-		</div>
+<h2 > Name: <%= @tk.name %> </h2>
+<!-- **************************Decription of task******************* -->
+<div class="col-sm-12">
+	<div class="well">
+		Description:  <%= @tk.description %>
 	</div>
-	<!-- **************************Type of task******************* -->
-	<div class="col-sm-3">
-		<div class="well">
-			Task Type:  
-			<%= find_task_type(@tk) %>
-		</div>
-	</div>
-	<!-- **************************Project name******************* -->
-	<div class="col-sm-3">
-		<div class="well">
-			Project name:  
-			<%= find_project(@tk) %>
-		</div>
-	</div>
-	<!-- **************************Updated at******************* -->
-	<div class="col-sm-3 ">
-		<div class="well">
-			Created: 
-			<%= @tk.updated_at.strftime(" %d-%m-%Y")  %>
-		</div>
-	</div>
-	<!-- **************************End date******************* -->
-	<div class="col-sm-3 ">
-		<div class="well">
-			Done upto:  
-			<% if @tk.end != nil %>
-		    	<td><%= @tk.end.strftime(" %d-%m-%Y") %></td>
-		    <% end %>
-	    </div>
-	</div>
-	<!-- **************************If current user is tlead or admin ******************* -->
-	<% if current_user.is_tlead? or current_user.is_admin? or current_user.is_tester? %>
-
-		<div class="col-sm-3 ">
-			<div class="well">
-				Developer Assigned:    
-				<%= find_developer(@tk)%> 
-			</div>
-		</div>
-	<% end %>
-	<% if current_user.is_tlead? or current_user.is_admin? or current_user.is_developer? %>
-		<div class="col-sm-3 ">
-			<div class="well">
-				Tester Assigned:    
-				<%= find_tester(@tk)%> 
-			</div>
-		</div>
-	<% end%>
-	<!-- **************************Satatus of task******************* -->
-	<div class="col-sm-3 ">
-		<div class="well">
-  	        Status:     
-	    	<%= find_status(@tk) %>
-		</div>    	
-    </div>
-    <!-- *******************************************If current user is tlead***************************** -->
-    <% if current_user.is_tlead? %>
-	    <div class="col-sm-6 ">
-			<div class="well">
-				<%= form_tag tl_assign_teamlead_index_path,  method: :put do %>
-				    <% if (@dps != nil) || (@tts != nil)%>
-						<% if @tk.created? or @tk.assigned? or @tk.reopened?%>
-							<%= select_tag("developer", options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>							
-							<%= submit_tag "Assign Task" , class:  "button2"%>
-							
-						<%elsif @tk.marked? or @tk.on_review? %>
-							<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>							
-							<%= submit_tag "Assign Task" , class:  "button2"%>
-						<% end%>
-						<%= hidden_field_tag :id, @tk.requirement_id%>
-						<%= hidden_field_tag :tasks_ids, @tk.id%>
-						
-					<%end%>
-				<%end%>
-			</div>
-		</div>
-
-	    <br><br><br><br><br><br><br><hr>
-	    <% if @tk.created? or @tk.assigned? or @tk.marked? %>
-			<%=button_to ' Delete this task ', task_path(@tk), :method => :delete, class: "button", data: {confirm: "Are you sure?"} %>
-		<% end %>
-	<%end%>			
 </div>
+<!-- **************************Type of task******************* -->
+<div class="col-sm-3">
+	<div class="well">
+		Task Type:  
+		<%= find_task_type(@tk) %>
+	</div>
+</div>
+<!-- **************************Project name******************* -->
+<div class="col-sm-3">
+	<div class="well">
+		Project name:  
+		<%= find_project(@tk) %>
+	</div>
+</div>
+<!-- **************************Updated at******************* -->
+<div class="col-sm-3 ">
+	<div class="well">
+		Created: 
+		<%= @tk.updated_at.strftime(" %d-%m-%Y")  %>
+	</div>
+</div>
+<!-- **************************End date******************* -->
+<div class="col-sm-3 ">
+	<div class="well">
+		Done upto:  
+		<% if @tk.end != nil %>
+	    	<td><%= @tk.end.strftime(" %d-%m-%Y") %></td>
+	    <% end %>
+    </div>
+</div>
+<!-- **************************If current user is tlead or admin ******************* -->
+<% if current_user.is_tlead? or current_user.is_admin? or current_user.is_tester? %>
+
+	<div class="col-sm-3 ">
+		<div class="well">
+			Developer Assigned:    
+			<%= find_developer(@tk)%> 
+		</div>
+	</div>
+<% end %>
+<% if current_user.is_tlead? or current_user.is_admin? or current_user.is_developer? %>
+	<div class="col-sm-3 ">
+		<div class="well">
+			Tester Assigned:    
+			<%= find_tester(@tk)%> 
+		</div>
+	</div>
+<% end%>
+<!-- **************************Satatus of task******************* -->
+<div class="col-sm-3 ">
+	<div class="well">
+	        Status:     
+    	<%= find_status(@tk) %>
+	</div>    	
+</div>
+<!-- *******************************************If current user is tlead***************************** -->
+<% if current_user.is_tlead? %>
+    <div class="col-sm-6 ">
+		<div class="well">
+			<%= form_tag tl_assign_teamlead_index_path,  method: :put do %>
+			    <% if (@dps != nil) || (@tts != nil)%>
+					<% if @tk.created? or @tk.assigned? or @tk.reopened?%>
+						<%= select_tag("developer", options_from_collection_for_select(@dps, "id", "username"),prompt: "Select Developers") %>							
+						<%= submit_tag "Assign Task" , class:  "button2"%>
+						
+					<%elsif @tk.marked? or @tk.on_review? %>
+						<%= select_tag(:tester, options_from_collection_for_select(@tts, "id", "username"),prompt: "Select Testers") %>							
+						<%= submit_tag "Assign Task" , class:  "button2"%>
+					<% end%>
+					<%= hidden_field_tag :id, @tk.requirement_id%>
+					<%= hidden_field_tag :tasks_ids, @tk.id%>
+					
+				<%end%>
+			<%end%>
+		</div>
+	</div>
+
+    <br><br><br><br><br><br><br><hr>
+    <% if @tk.created? or @tk.assigned? or @tk.marked? %>
+		<%=button_to ' Delete this task ', task_path(@tk), :method => :delete, class: "button", data: {confirm: "Are you sure?"} %>
+	<% end %>
+<%end%>			
+
